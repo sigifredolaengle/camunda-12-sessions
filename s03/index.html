@@ -215,48 +215,62 @@ figcaption { display: none; }
 </head>
 <body>
 <h1 id="s03-student-guide-gateways">S03 student guide: Gateways</h1>
-<p><strong>Today you will</strong> route requests by type, by decision,
-and notify one or more people.</p>
-<p><strong>Before class.</strong> Your <code>thread-s02.bpmn</code> and
-<code>request-intake.form</code> from session 2. Start Camunda with
-<em>Iniciar Camunda</em>.</p>
-<h2 id="links">Links</h2>
+<h2 id="goal">Goal</h2>
+<p>Today you will route requests by type, by decision, and notify one or
+more people.</p>
+<h2 id="before-class">Before class</h2>
 <table>
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr>
 <th>Open</th>
 <th>Link</th>
+<th>What to do</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Tasklist, tab <em>Processes</em> (start the class here)</td>
+<td>Your model from session 2</td>
+<td>your <code>thread-s02.bpmn</code></td>
+<td>Open it in the Modeler: step 3 starts from it.</td>
+</tr>
+<tr>
+<td>If you do not have it</td>
+<td><a href="files/thread-s02.bpmn" download><code>thread-s02.bpmn</code></a>, <a href="files/request-intake.form" download><code>request-intake.form</code></a>, <a href="files/review-request-s02.form" download><code>review-request-s02.form</code></a></td>
+<td>Download the three. Deploy the two forms first, then the model.</td>
+</tr>
+<tr>
+<td>Tasklist, tab <em>Processes</em></td>
 <td><a href="http://127.0.0.1:8080/tasklist/processes" class="uri">http://127.0.0.1:8080/tasklist/processes</a></td>
+<td>Start the class: <em>S03 · Gateways</em> → <em>Start process</em>
+(<em>Iniciar proceso</em>), and fill in your RUT, names and e-mail. In
+the lab, <em>Iniciar Camunda</em> has already deployed it.</td>
+</tr>
+<tr>
+<td>The class, for your own computer</td>
+<td><a href="https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip" class="uri">https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip</a></td>
+<td>Only on your own computer, before you start the class: unzip it and
+double-click <code>desplegar-clase.bat</code> (macOS:
+<code>desplegar-clase.command</code>).</td>
 </tr>
 <tr>
 <td>Tasklist, your tasks</td>
 <td><a href="http://127.0.0.1:8080/tasklist" class="uri">http://127.0.0.1:8080/tasklist</a></td>
+<td>Complete each step of the class here.</td>
 </tr>
 <tr>
-<td>Operate (instances, tokens, incidents)</td>
+<td>Operate</td>
 <td><a href="http://localhost:8080/operate" class="uri">http://localhost:8080/operate</a></td>
-</tr>
-<tr>
-<td>This guide</td>
-<td><a href="https://sigifredolaengle.github.io/camunda-12-sessions/s03/" class="uri">https://sigifredolaengle.github.io/camunda-12-sessions/s03/</a></td>
-</tr>
-<tr>
-<td>The guided class, for your own computer</td>
-<td><a href="https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip" class="uri">https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip</a></td>
+<td>Look at instances, tokens and incidents.</td>
 </tr>
 </tbody>
 </table>
-<p>User and password of Operate and Tasklist: <code>demo</code> /
-<code>demo</code>.</p>
+<p>Start Camunda with <em>Iniciar Camunda</em>. User and password of
+Operate and Tasklist: <code>demo</code> / <code>demo</code>.</p>
 <h2 id="how-to-work-today">How to work today</h2>
 <p><strong>The guide tells you what to do. Tasklist tells you when you
 are done.</strong></p>
@@ -265,7 +279,7 @@ are done.</strong></p>
 the same number: Step 3 here is the task <em>S03 · 3 Route by type and
 decide</em>.</li>
 <li>Work with this guide and the Modeler side by side, and keep Operate
-and Tasklist open in two tabs (see <em>Links</em>).</li>
+and Tasklist open in two tabs.</li>
 <li>Do the step here, then open its task in Tasklist. The task lists
 what the engine will check (<em>Done when</em>) and asks a few
 questions. Complete it: if something is missing, the same task comes
@@ -273,14 +287,6 @@ back with <strong>Feedback</strong>.</li>
 <li>After a deploy, wait a few seconds before you complete a task: the
 engine needs a moment to see the new version.</li>
 </ul>
-<p><strong>Start the class.</strong> In the lab, <em>Iniciar
-Camunda</em> has already deployed it. In Tasklist, tab
-<strong>Processes</strong> (<em>Procesos</em>): <em>S03 · Gateways</em>
-→ <em>Start process</em> (<em>Iniciar proceso</em>), and fill in your
-RUT, names and e-mail. On your own computer, first download
-<code>class-s03.zip</code> (see <em>Links</em>), unzip it and
-double-click <code>desplegar-clase.bat</code> (macOS:
-<code>desplegar-clase.command</code>).</p>
 <p><strong>Two kinds of code in this guide.</strong></p>
 <ul>
 <li>A grey block with a <strong>Copy</strong> button is data: copy and
