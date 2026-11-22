@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Preparación de la sala de computadores: Camunda 8 en
+Windows</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style>
+:root { --fg:#1f2328; --muted:#59636e; --bg:#ffffff; --code:#f3f4f6; --line:#d1d9e0;
+--type:#fff4e5; --type-line:#e8890c; --accent:#0b62d6; }
+@media (prefers-color-scheme: dark) {
+:root { --fg:#e6e8eb; --muted:#9aa4ae; --bg:#16181c; --code:#23272e; --line:#3a414b;
+--type:#33270f; --type-line:#f0a030; --accent:#6aa8ff; } }
+html { background: var(--bg); }
+body { color: var(--fg); background: var(--bg); max-width: 52rem; margin: 0 auto;
+padding: 2rem 1rem 4rem; font: 16px/1.6 -apple-system, "Segoe UI", Roboto,
+Helvetica, Arial, sans-serif; }
+* { hyphens: manual !important; -webkit-hyphens: manual !important; }
+h1 { font-size: 1.8rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; padding-top: .8rem;
+border-top: 1px solid var(--line); }
+a { color: var(--accent); }
+p > em:only-child { color: var(--muted); }
+code { font: .92em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+background: var(--code); padding: .1em .35em; border-radius: 4px; }
+pre { position: relative; background: var(--code); border: 1px solid var(--line);
+border-radius: 8px; padding: .8rem 5.5rem .8rem 1rem; overflow-x: auto;
+white-space: pre-wrap; word-break: break-word; }
+pre code { background: none; padding: 0; }
+button.copy { position: absolute; top: .45rem; right: .45rem; font: 600 .8rem/1 inherit;
+font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+padding: .4rem .7rem; border-radius: 6px; border: 1px solid var(--line);
+background: var(--bg); color: var(--fg); cursor: pointer; }
+button.copy:hover { border-color: var(--accent); color: var(--accent); }
+button.copy.done { border-color: #1a7f37; color: #1a7f37; }
+div.type { background: var(--type); border-left: 5px solid var(--type-line);
+border-radius: 8px; padding: .6rem 1rem .2rem; margin: 1rem 0; }
+div.type::before { content: "⌨ Type it yourself — do not copy"; display: block;
+font-weight: 700; font-size: .9rem; color: var(--type-line);
+margin-bottom: .3rem; }
+div.type pre { background: var(--bg); padding-right: 1rem; }
+table { border-collapse: collapse; margin: 1rem 0; width: 100%; font-size: .95rem; }
+th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left;
+vertical-align: top; }
+th { background: var(--code); }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px;
+background: #fff; }
+figure { margin: 1.2rem 0; }
+figcaption { display: none; }
+</style>
+</head>
+<body>
+<h1 id="preparación-de-la-sala-de-computadores-camunda-8-en-windows">Preparación
+de la sala de computadores: Camunda 8 en Windows</h1>
+<p>Instrucciones para el técnico que prepara la sala del curso
+<em>Camunda en 12 sesiones</em>.</p>
+<p><strong>Qué queda instalado en cada computador:</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Programa</th>
+<th>Versión</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java (Eclipse Temurin)</td>
+<td>21</td>
+<td>Lo necesita Camunda 8 Run 8.9</td>
+</tr>
+<tr>
+<td>Camunda 8 Run</td>
+<td>8.9</td>
+<td>El motor de procesos, con Operate y Tasklist (se usan en el
+navegador)</td>
+</tr>
+<tr>
+<td>Camunda Desktop Modeler</td>
+<td>5.52 o posterior</td>
+<td>El editor de diagramas</td>
+</tr>
+<tr>
+<td>Plugin Token Simulation</td>
+<td>0.24.0</td>
+<td>Simulación de diagramas dentro del Modeler</td>
+</tr>
+</tbody>
+</table>
+<p>Todo es gratuito para uso educativo. Nada necesita internet durante
+la clase: todo corre en el mismo computador
+(<code>localhost</code>).</p>
+<h2 id="antes-de-empezar">0. Antes de empezar</h2>
+<p><strong>Requisitos de cada computador:</strong></p>
+<ul>
+<li>Windows 10 u 11 de 64 bits.</li>
+<li>8 GB de RAM como mínimo (16 GB recomendados).</li>
+<li><strong>Al menos 10 GB libres en el disco, siempre.</strong> Camunda
+se apaga solo si el disco queda casi lleno: arranca, funciona unos
+minutos y se detiene sin mensaje claro. En el registro
+(<code>C:\camunda\c8run-8.9…\log\camunda.log</code>) aparece «Not enough
+disk space available».</li>
+<li>El puerto 8080 libre. Para comprobarlo, en PowerShell:
+<code>netstat -ano | findstr :8080</code> no debe mostrar nada.</li>
+<li>Permisos de administrador para instalar.</li>
+<li>Acceso a <code>https://sigifredolaengle.github.io</code> (el sitio
+del curso). <em>Iniciar Camunda</em> descarga de ahí las clases guiadas
+cada vez que arranca; si un proxy o filtro de la red lo bloquea, las
+clases no se actualizan.</li>
+<li>Que se pueda escribir en <code>C:\camunda</code> durante la sesión,
+también en <code>C:\camunda\clases</code>.</li>
+</ul>
+<p><strong>Preguntas para el técnico</strong> (por favor, responder al
+profesor antes de instalar):</p>
+<ol type="1">
+<li>¿Los computadores tienen un programa que restaura el equipo al
+reiniciar (Deep Freeze, Reboot Restore, Windows Unified Write Filter u
+otro)? Si es así:
+<ul>
+<li>Hay que instalar todo con el equipo <em>descongelado</em>, para que
+la instalación quede en la imagen.</li>
+<li>Lo que los estudiantes hagan en clase (modelos desplegados,
+instancias) se borra al reiniciar. Para el curso eso no es un problema,
+pero el profesor necesita saberlo.</li>
+<li>La carpeta <code>C:\camunda</code> debe quedar en la imagen, pero
+Camunda escribe datos dentro de ella (<code>camunda-data</code> y
+<code>log</code>) mientras corre: debe poder escribir ahí durante la
+sesión.</li>
+</ul></li>
+<li>¿Los estudiantes entran con una cuenta común o cada uno con su
+cuenta? Las instrucciones de abajo dejan todo para todas las cuentas del
+computador; si algo queda solo en la cuenta del instalador (por ejemplo,
+la asociación de archivos <code>.bpmn</code>), hay que repetirlo en la
+cuenta común.</li>
+<li>¿Hay una política que bloquee programas descargados (SmartScreen,
+AppLocker, antivirus)? <code>c8run.exe</code> y
+<code>Camunda Modeler.exe</code> vienen en un <code>.zip</code>, sin
+instalador.</li>
+</ol>
+<h2 id="archivos">Archivos</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="files/iniciar-camunda.bat"><code>iniciar-camunda.bat</code></a></td>
+<td>Inicia Camunda, despliega las clases guiadas y abre Operate y
+Tasklist (paso 5)</td>
+</tr>
+<tr>
+<td><a href="files/detener-camunda.bat"><code>detener-camunda.bat</code></a></td>
+<td>Detiene Camunda (paso 5)</td>
+</tr>
+<tr>
+<td><a href="files/token-simulation-v0.24.0.zip"><code>token-simulation-v0.24.0.zip</code></a></td>
+<td>Plugin del Modeler (paso 4)</td>
+</tr>
+<tr>
+<td><a href="files/thread-s01.bpmn"><code>thread-s01.bpmn</code></a></td>
+<td>Modelo de prueba (paso 6)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="java-21">1. Java 21</h2>
+<p>Página oficial: <a href="https://adoptium.net/temurin/releases/?version=21&amp;os=windows&amp;arch=x64" class="uri">https://adoptium.net/temurin/releases/?version=21&amp;os=windows&amp;arch=x64</a>.</p>
+<p><strong>Opción A, instalador <code>.msi</code>:</strong> descargar
+<em>JDK 21, Windows x64, .msi</em>. En el instalador:</p>
+<ul>
+<li>elegir <em>Install for all users</em> (instalar para todos los
+usuarios);</li>
+<li>en las funciones, activar <strong>Set JAVA_HOME variable</strong>
+(viene desactivada).</li>
+</ul>
+<p><strong>Opción B, <code>winget</code></strong> (PowerShell como
+administrador):</p>
+<pre class="powershell"><code>winget install EclipseAdoptium.Temurin.21.JDK --scope machine</code></pre>
+<p>Si <code>JAVA_HOME</code> quedó vacía, definirla como variable
+<strong>del sistema</strong> (PowerShell como administrador, con el
+nombre exacto de la carpeta):</p>
+<pre class="powershell"><code>setx /M JAVA_HOME &quot;C:\Program Files\Eclipse Adoptium\jdk-21.0.x.x-hotspot&quot;</code></pre>
+<p><strong>Comprobar</strong> en una ventana de PowerShell
+<strong>nueva</strong>:</p>
+<pre class="powershell"><code>java -version
+echo $env:JAVA_HOME</code></pre>
+<p>La primera línea debe decir <code>21</code>; la segunda, la carpeta
+de Java.</p>
+<h2 id="camunda-8-run-8.9">2. Camunda 8 Run 8.9</h2>
+<p>Descarga directa (Windows x64): <a href="https://downloads.camunda.cloud/release/camunda/c8run/8.9/camunda8-run-8.9-windows-x86_64.zip" class="uri">https://downloads.camunda.cloud/release/camunda/c8run/8.9/camunda8-run-8.9-windows-x86_64.zip</a>.
+Instrucciones oficiales: <a href="https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run/install-start/" class="uri">https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run/install-start/</a>.</p>
+<p>Descomprimir en <code>C:\camunda</code> (la ruta no debe tener
+espacios). En PowerShell:</p>
+<pre class="powershell"><code>Expand-Archive &quot;$env:USERPROFILE\Downloads\camunda8-run-8.9-windows-x86_64.zip&quot; -DestinationPath C:\camunda</code></pre>
+<p>Queda una carpeta <code>C:\camunda\c8run-8.9.…</code> con
+<code>c8run.exe</code> dentro. Los scripts del paso 5 buscan Camunda
+ahí.</p>
+<p><strong>Primer arranque de prueba:</strong></p>
+<pre class="powershell"><code>cd C:\camunda\c8run*
+.\c8run.exe start</code></pre>
+<p>Tarda entre uno y tres minutos y termina con «All processes are
+running and healthy». Si SmartScreen detiene <code>c8run.exe</code>:
+<em>Más información → Ejecutar de todas formas</em>. Si el firewall de
+Windows pregunta, no hace falta abrir nada hacia la red: todo funciona
+dentro del mismo computador.</p>
+<p>Para detenerlo: <code>.\c8run.exe stop</code>.</p>
+<p>Problemas frecuentes: <a href="https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run-troubleshooting/" class="uri">https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run-troubleshooting/</a>.</p>
+<h2 id="camunda-desktop-modeler">3. Camunda Desktop Modeler</h2>
+<p>Página de descargas: <a href="https://camunda.com/download/modeler/" class="uri">https://camunda.com/download/modeler/</a>. Para Windows solo
+hay un <code>.zip</code> (sin instalador), por ejemplo <a href="https://downloads.camunda.cloud/release/camunda-modeler/5.53.0/camunda-modeler-5.53.0-win-x64.zip" class="uri">https://downloads.camunda.cloud/release/camunda-modeler/5.53.0/camunda-modeler-5.53.0-win-x64.zip</a>.
+El curso se probó con la 5.52; sirve cualquier 5.x igual o
+posterior.</p>
+<ol type="1">
+<li>Descomprimir en <code>C:\camunda\modeler</code> (clic derecho →
+<em>Extraer todo</em>). Queda
+<code>C:\camunda\modeler\Camunda Modeler.exe</code>.</li>
+<li>Crear un acceso directo a <code>Camunda Modeler.exe</code> en el
+<strong>escritorio público</strong>
+(<code>C:\Users\Public\Desktop</code>), para que aparezca en todas las
+cuentas.</li>
+<li>Asociar los archivos <code>.bpmn</code>, <code>.dmn</code> y
+<code>.form</code> con el Modeler: clic derecho sobre <a href="files/thread-s01.bpmn"><code>thread-s01.bpmn</code></a> →
+<em>Abrir con</em> → <em>Elegir otra aplicación</em> → buscar
+<code>C:\camunda\modeler\Camunda Modeler.exe</code> → <em>Siempre</em>.
+Repetir con un <code>.dmn</code> y un <code>.form</code> si se dispone
+de ellos. Esta asociación queda en la cuenta que la hace: si los
+estudiantes usan otra cuenta, repetirla en esa cuenta.</li>
+</ol>
+<h2 id="plugin-token-simulation">4. Plugin Token Simulation</h2>
+<p>Con el Modeler <strong>cerrado</strong>, descomprimir <a href="files/token-simulation-v0.24.0.zip"><code>token-simulation-v0.24.0.zip</code></a>
+dentro de <code>C:\camunda\modeler\resources\plugins</code> (si no
+existe la carpeta <code>plugins</code>, crearla). El <code>.zip</code>
+trae la carpeta <code>token-simulation</code>, así que queda así (todas
+las cuentas del computador lo ven):</p>
+<pre><code>C:\camunda\modeler\resources\plugins\token-simulation\index.js</code></pre>
+<p>Debe haber un solo nivel de carpeta <code>token-simulation</code> (no
+<code>token-simulation\token-simulation</code>).</p>
+<p><strong>Comprobar:</strong> abrir el Modeler y un diagrama
+<code>.bpmn</code>. Arriba a la izquierda aparece el interruptor
+<em>Token Simulation</em>, y el menú <em>Plugins</em> lo lista.</p>
+<p>El plugin es de código abierto (licencia MIT): el <code>.zip</code>
+contiene la versión 0.24.0 publicada en npm
+(<code>camunda-modeler-token-simulation-plugin</code>), sin cambios.
+Repositorio oficial: <a href="https://github.com/camunda/camunda-modeler-token-simulation-plugin" class="uri">https://github.com/camunda/camunda-modeler-token-simulation-plugin</a>.</p>
+<h2 id="accesos-directos-para-iniciar-y-detener-camunda">5. Accesos
+directos para iniciar y detener Camunda</h2>
+<p>Camunda <strong>no</strong> arranca solo al encender el computador, y
+conviene que sea así: ocupa entre 2 y 4 GB de RAM y la sala la usan
+otros cursos. Se inicia con un doble clic al empezar la clase.</p>
+<ol type="1">
+<li>Copiar <a href="files/iniciar-camunda.bat"><code>iniciar-camunda.bat</code></a> y
+<a href="files/detener-camunda.bat"><code>detener-camunda.bat</code></a>
+a <code>C:\camunda</code>.</li>
+<li>Crear en el escritorio público
+(<code>C:\Users\Public\Desktop</code>) dos accesos directos:
+<ul>
+<li><strong>Iniciar Camunda</strong> →
+<code>C:\camunda\iniciar-camunda.bat</code></li>
+<li><strong>Detener Camunda</strong> →
+<code>C:\camunda\detener-camunda.bat</code></li>
+</ul></li>
+</ol>
+<p><code>iniciar-camunda.bat</code> arranca Camunda, espera a que esté
+listo (uno a tres minutos), despliega las clases guiadas y abre dos
+pestañas del navegador.</p>
+<p><strong>Clases guiadas.</strong> Cada sesión del curso es también un
+proceso que el alumno sigue en Tasklist. Al arrancar, el
+<code>.bat</code> descarga la versión publicada de todas las clases
+desde el sitio del curso a <code>C:\camunda\clases</code> y las
+despliega en Camunda. Sin conexión con el sitio, despliega las que ya
+había descargado. Volver a desplegar un archivo idéntico no crea una
+versión nueva, así que esto se repite sin problema en cada inicio,
+también con Deep Freeze.</p>
+<p>Las pestañas:</p>
+<ul>
+<li>Operate en <code>http://localhost:8080/operate</code></li>
+<li>Tasklist en <code>http://127.0.0.1:8080/tasklist</code></li>
+</ul>
+<p>Las dos direcciones llevan al mismo Camunda; se usan dos distintas
+para que el navegador mantenga abiertas las dos sesiones a la vez. Si
+Camunda ya estaba corriendo, solo abre las pestañas. Usuario y clave:
+<code>demo</code> / <code>demo</code>.</p>
+<h2 id="verificación">6. Verificación</h2>
+<p>Con Camunda iniciado (acceso directo <em>Iniciar Camunda</em>):</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Verificación</th>
+<th>Cómo</th>
+<th>Resultado esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java</td>
+<td><code>java -version</code> en PowerShell</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Operate</td>
+<td>abrir <code>http://localhost:8080/operate</code>, entrar con
+<code>demo</code> / <code>demo</code></td>
+<td>el panel de Operate</td>
+</tr>
+<tr>
+<td>Tasklist</td>
+<td>abrir <code>http://127.0.0.1:8080/tasklist</code>, entrar con
+<code>demo</code> / <code>demo</code></td>
+<td>una lista de tareas vacía</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>curl.exe -i http://localhost:8080/v2/topology</code> en
+PowerShell</td>
+<td><code>HTTP/1.1 200</code> y el estado del clúster</td>
+</tr>
+<tr>
+<td>Clases guiadas</td>
+<td>En Tasklist, pestaña <em>Procesos</em></td>
+<td>aparecen <em>S01 · From drawing to running</em>, <em>S02 ·
+Variables, FEEL and forms</em> y <em>S03 · Gateways</em></td>
+</tr>
+</tbody>
+</table>
+<p>En PowerShell hay que escribir <code>curl.exe</code>, no
+<code>curl</code>: <code>curl</code> es otro comando.</p>
+<p><strong>Prueba completa con un modelo:</strong></p>
+<ol type="1">
+<li>Abrir <a href="files/thread-s01.bpmn"><code>thread-s01.bpmn</code></a> con doble
+clic: se abre en el Modeler.</li>
+<li>Clic en el ícono del cohete (<em>Deploy</em>), abajo a la izquierda.
+Destino: <strong>Camunda 8 Self-Managed</strong>,
+<code>http://localhost:8080</code>, sin autenticación. En las versiones
+recientes del Modeler aparece ya configurado como <em>c8run
+(local)</em>.</li>
+<li>Clic en el triángulo (<em>Start instance</em>), al lado del cohete.
+En la ventana que se abre, dejar vacía la caja <em>Variables</em> y
+hacer clic en <em>Start</em>.</li>
+<li>En Tasklist aparece la tarea <em>Review request</em>. Asignarla
+(<em>Assign to me</em>) y completarla (<em>Complete task</em>).</li>
+<li>En Operate, la instancia de <em>Student request</em> aparece como
+terminada.</li>
+</ol>
+<p>Si los cinco pasos funcionan, el computador está listo. Al terminar,
+hacer clic en <em>Detener Camunda</em>.</p>
+<h2 id="si-algo-falla">Si algo falla</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Síntoma</th>
+<th>Causa probable</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Camunda arranca y se apaga solo a los pocos minutos</td>
+<td>Poco espacio en el disco</td>
+<td>Liberar espacio (al menos 10 GB libres) e iniciar de nuevo</td>
+</tr>
+<tr>
+<td><code>c8run.exe</code> dice que no encuentra Java</td>
+<td><code>JAVA_HOME</code> vacía o de otra versión</td>
+<td>Revisar el paso 1, en una ventana nueva</td>
+</tr>
+<tr>
+<td>El puerto 8080 está ocupado</td>
+<td>Otro programa lo usa</td>
+<td>Avisar al profesor: Camunda puede usar otro puerto, pero hay que
+cambiarlo en todo el curso</td>
+</tr>
+<tr>
+<td>El Modeler no muestra <em>Token Simulation</em></td>
+<td>Plugin en la carpeta equivocada o con dos niveles</td>
+<td>Revisar la ruta del paso 4 y reiniciar el Modeler</td>
+</tr>
+<tr>
+<td>Tasklist no muestra las clases guiadas</td>
+<td>La sala no llega al sitio del curso</td>
+<td>En PowerShell:
+<code>curl.exe -I https://sigifredolaengle.github.io/camunda-12-sessions/classes/manifest.txt</code>
+debe decir <code>200</code>. Si no, pedir que se permita
+<code>sigifredolaengle.github.io</code></td>
+</tr>
+<tr>
+<td>El despliegue falla con «Attribute ‘type’ must be present»</td>
+<td>El archivo <code>.bpmn</code> se modificó</td>
+<td>Volver a descargar <a href="files/thread-s01.bpmn"><code>thread-s01.bpmn</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Ante cualquier duda, escribir al profesor del curso.</p>
+<script>
+var ES = document.documentElement.lang === "es";
+var L = ES ? ["Copiar", "Copiado"] : ["Copy", "Copied"];
+document.querySelectorAll("pre").forEach(function (pre) {
+  if (pre.closest("div.type")) return;
+  var b = document.createElement("button");
+  b.className = "copy"; b.type = "button"; b.textContent = L[0];
+  b.addEventListener("click", function () {
+    var t = pre.querySelector("code").innerText.replace(/\n$/, "");
+    var ok = function () { b.textContent = L[1]; b.classList.add("done");
+      setTimeout(function () { b.textContent = L[0]; b.classList.remove("done"); }, 1500); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(t).then(ok);
+    } else {
+      var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+      a.select(); document.execCommand("copy"); a.remove(); ok();
+    }
+  });
+  pre.appendChild(b);
+});
+</script>
+</body>
+</html>

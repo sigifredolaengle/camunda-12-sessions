@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc 3.11" />
@@ -179,6 +179,7 @@ html { background: var(--bg); }
 body { color: var(--fg); background: var(--bg); max-width: 52rem; margin: 0 auto;
 padding: 2rem 1rem 4rem; font: 16px/1.6 -apple-system, "Segoe UI", Roboto,
 Helvetica, Arial, sans-serif; }
+* { hyphens: manual !important; -webkit-hyphens: manual !important; }
 h1 { font-size: 1.8rem; margin-top: 0; }
 h2 { font-size: 1.35rem; margin-top: 2.5rem; padding-top: .8rem;
 border-top: 1px solid var(--line); }
@@ -494,14 +495,16 @@ forever.</li>
 instances and the incident. Keep <code>thread-s03.bpmn</code>: session 4
 starts from it.</p>
 <script>
+var ES = document.documentElement.lang === "es";
+var L = ES ? ["Copiar", "Copiado"] : ["Copy", "Copied"];
 document.querySelectorAll("pre").forEach(function (pre) {
   if (pre.closest("div.type")) return;
   var b = document.createElement("button");
-  b.className = "copy"; b.type = "button"; b.textContent = "Copy";
+  b.className = "copy"; b.type = "button"; b.textContent = L[0];
   b.addEventListener("click", function () {
     var t = pre.querySelector("code").innerText.replace(/\n$/, "");
-    var ok = function () { b.textContent = "Copied"; b.classList.add("done");
-      setTimeout(function () { b.textContent = "Copy"; b.classList.remove("done"); }, 1500); };
+    var ok = function () { b.textContent = L[1]; b.classList.add("done");
+      setTimeout(function () { b.textContent = L[0]; b.classList.remove("done"); }, 1500); };
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(t).then(ok);
     } else {
