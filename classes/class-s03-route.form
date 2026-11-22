@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · 3 Route by type and decide\n*Guide: Step 3.*",
+      "id": "class_s03_route_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbRoute}}",
+      "conditional": {
+        "hide": "=fbRoute = null or fbRoute = \"\""
+      },
+      "id": "class_s03_route_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_route_2"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\n- your latest **student-request** is deployed (wait a few seconds after the deploy)\n- it has three exclusive gateways: *Type of request?*, *Approved?* and the merge\n- *Type of request?* and *Approved?* each have a default flow\n- script tasks save `certificateNumber`, `registered` and `letter`",
+      "id": "class_s03_route_3"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-route",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

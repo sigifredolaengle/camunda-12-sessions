@@ -1,0 +1,99 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Step 1: the worked example\nThe teacher deploys the OMG *Incident management* model twice: first the original, then an adapted version. Watch, then answer.",
+      "id": "class_s01_part_a_0"
+    },
+    {
+      "type": "text",
+      "text": "**Feedback.** {{fbPartA}}",
+      "conditional": {
+        "hide": "=fbPartA = null or fbPartA = \"\""
+      },
+      "id": "class_s01_part_a_1"
+    },
+    {
+      "type": "checklist",
+      "key": "a1",
+      "label": "1. Which errors did the original model produce on deploy? (select all that apply)",
+      "values": [
+        {
+          "label": "The process is not marked executable",
+          "value": "notExecutable"
+        },
+        {
+          "label": "The gateways have no conditions",
+          "value": "noConditions"
+        },
+        {
+          "label": "The message start event names no message",
+          "value": "noMessage"
+        },
+        {
+          "label": "The tasks have no assignee",
+          "value": "noAssignee"
+        },
+        {
+          "label": "The diagram has lanes",
+          "value": "lanes"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s01_part_a_2"
+    },
+    {
+      "type": "radio",
+      "key": "a2",
+      "label": "2. In the adapted model, what does the gateway \"Can handle myself?\" read?",
+      "values": [
+        {
+          "label": "The variable canHandle",
+          "value": "canHandle"
+        },
+        {
+          "label": "The lane of the account manager",
+          "value": "lane"
+        },
+        {
+          "label": "What the person decides, without any variable",
+          "value": "person"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s01_part_a_3"
+    },
+    {
+      "type": "radio",
+      "key": "a3",
+      "label": "3. The first instance was completed with no variables. Which way did it go?",
+      "values": [
+        {
+          "label": "To Handle 1st level issue: canHandle did not exist, so the default flow was taken",
+          "value": "default"
+        },
+        {
+          "label": "To Explain solution: with no variable the answer is yes",
+          "value": "yes"
+        },
+        {
+          "label": "Nowhere: the instance stopped with an incident",
+          "value": "incident"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s01_part_a_4"
+    }
+  ],
+  "type": "default",
+  "id": "class-s01-part-a",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

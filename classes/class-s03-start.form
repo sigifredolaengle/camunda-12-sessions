@@ -1,0 +1,52 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · Gateways\n**The guide tells you what to do. Tasklist tells you when you are done.**\n\n- The student guide has eight steps; each one is a task here with the same number.\n- Do the step in the guide, then open its task: it lists what the engine will check (*Done when*) and asks a few questions.\n- If something is missing, the same task comes back with **Feedback**.\n\nFill in your data to start.\n\nYour answers go to the teacher at the end.",
+      "id": "class_s03_start_0"
+    },
+    {
+      "type": "textfield",
+      "key": "rut",
+      "label": "RUT",
+      "validate": {
+        "required": true
+      },
+      "description": "Format 12.345.678-5",
+      "id": "class_s03_start_1"
+    },
+    {
+      "type": "textfield",
+      "key": "lastName",
+      "label": "Last name(s)",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_start_2"
+    },
+    {
+      "type": "textfield",
+      "key": "firstName",
+      "label": "First name(s)",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_start_3"
+    },
+    {
+      "type": "textfield",
+      "key": "studentEmail",
+      "label": "E-mail",
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      },
+      "id": "class_s03_start_4"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-start",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_class-s01" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <bpmn:process id="class-s01" name="S01 · From drawing to running" isExecutable="true">
+    <bpmn:documentation>Guided class of session 1: the student runs it in Tasklist.</bpmn:documentation>
+    <bpmn:startEvent id="Start" name="Class started">
+      <bpmn:extensionElements><zeebe:formDefinition formId="class-s01-start" /></bpmn:extensionElements>
+      <bpmn:outgoing>Flow_Start_Config</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Config" name="Prepare the class">
+      <bpmn:extensionElements><zeebe:script expression='={caseId: if caseId = null then "student-request" else caseId, testId: if testId = null then "student-request-test" else testId, engineUrl: if engineUrl = null then "http://localhost:8080" else engineUrl, resultsUrl: if resultsUrl = null then "https://script.google.com/macros/s/AKfycbw_pq8bBmwMYtrJ2wetrkkOOZX0nojMt2kow3qfleQh3NQbiI7NDzXuL4SeVliYpBI/exec" else resultsUrl}' resultVariable="cfg" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_Start_Config</bpmn:incoming>
+      <bpmn:outgoing>Flow_Config_WorkedExample</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:subProcess id="WorkedExample" name="1 Worked example">
+      <bpmn:incoming>Flow_Config_WorkedExample</bpmn:incoming>
+      <bpmn:outgoing>Flow_WorkedExample_RunCase</bpmn:outgoing>
+      <bpmn:startEvent id="WorkedExampleStart">
+        <bpmn:outgoing>Flow_WorkedExampleStart_PartA</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="WorkedExampleEnd" name="Step done">
+        <bpmn:incoming>Flow_GwPartA_WorkedExampleEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:userTask id="PartA" name="S01 · 1 Worked example">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-part-a" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_WorkedExampleStart_PartA</bpmn:incoming>
+        <bpmn:incoming>Flow_GwPartA_PartA</bpmn:incoming>
+        <bpmn:outgoing>Flow_PartA_FbPartA</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="FbPartA" name="Check the answers">
+        <bpmn:extensionElements><zeebe:script expression='=if (count(a1) = 3 and list contains(a1, "notExecutable") and list contains(a1, "noConditions") and list contains(a1, "noMessage")) and (a2 = "canHandle") and (a3 = "default") then "" else "Not yet. " + (if count(a1) = 3 and list contains(a1, "notExecutable") and list contains(a1, "noConditions") and list contains(a1, "noMessage") then "" else "Question 1: there are exactly three deploy errors; assignees and lanes are not errors. ") + (if a2 = "canHandle" then "" else "Question 2: select the yes flow of the gateway and read its condition. ") + (if a3 = "default" then "" else "Question 3: with no variable the condition is false, so the engine takes the default flow. ")' resultVariable="fbPartA" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_PartA_FbPartA</bpmn:incoming>
+        <bpmn:outgoing>Flow_FbPartA_GwPartA</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:exclusiveGateway id="GwPartA" name="Step passed?" default="Flow_GwPartA_PartA">
+        <bpmn:incoming>Flow_FbPartA_GwPartA</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwPartA_WorkedExampleEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwPartA_PartA</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_WorkedExampleStart_PartA" sourceRef="WorkedExampleStart" targetRef="PartA" />
+      <bpmn:sequenceFlow id="Flow_PartA_FbPartA" sourceRef="PartA" targetRef="FbPartA" />
+      <bpmn:sequenceFlow id="Flow_FbPartA_GwPartA" sourceRef="FbPartA" targetRef="GwPartA" />
+      <bpmn:sequenceFlow id="Flow_GwPartA_WorkedExampleEnd" name="yes" sourceRef="GwPartA" targetRef="WorkedExampleEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fbPartA = ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwPartA_PartA" name="not yet" sourceRef="GwPartA" targetRef="PartA" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="RunCase" name="2 Model, deploy and run">
+      <bpmn:incoming>Flow_WorkedExample_RunCase</bpmn:incoming>
+      <bpmn:outgoing>Flow_RunCase_KeepAlive</bpmn:outgoing>
+      <bpmn:startEvent id="RunCaseStart">
+        <bpmn:outgoing>Flow_RunCaseStart_Run</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="RunCaseEnd" name="Step done">
+        <bpmn:incoming>Flow_GwRun_RunCaseEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="CheckCompleted" name="Check: a completed instance">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source='=cfg.engineUrl + "/v2/process-instances/search"' target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={filter: {processDefinitionId: cfg.caseId, state: "COMPLETED"}}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value="={completedCount: response.body.page.totalItems}" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_Run_CheckCompleted</bpmn:incoming>
+        <bpmn:outgoing>Flow_CheckCompleted_FbRun</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Run" name="S01 · 2 Model, deploy and run">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-run" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_RunCaseStart_Run</bpmn:incoming>
+        <bpmn:incoming>Flow_GwRun_Run</bpmn:incoming>
+        <bpmn:outgoing>Flow_Run_CheckCompleted</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="FbRun" name="Check the answers">
+        <bpmn:extensionElements><zeebe:script expression='=if (completedCount &gt;= 1) and (checkpoint1 = "review") then "" else "Not yet. " + (if completedCount &gt;= 1 then "" else "The engine has no completed instance of " + cfg.caseId + ". Is the process id exactly " + cfg.caseId + "? Did you complete Review request in Tasklist? ") + (if checkpoint1 = "review" then "" else "Checkpoint 1: look in Operate before you complete the task. The token waits where the engine waits for a person. ")' resultVariable="fbRun" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CheckCompleted_FbRun</bpmn:incoming>
+        <bpmn:outgoing>Flow_FbRun_GwRun</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:exclusiveGateway id="GwRun" name="Step passed?" default="Flow_GwRun_Run">
+        <bpmn:incoming>Flow_FbRun_GwRun</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwRun_RunCaseEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwRun_Run</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_RunCaseStart_Run" sourceRef="RunCaseStart" targetRef="Run" />
+      <bpmn:sequenceFlow id="Flow_Run_CheckCompleted" sourceRef="Run" targetRef="CheckCompleted" />
+      <bpmn:sequenceFlow id="Flow_CheckCompleted_FbRun" sourceRef="CheckCompleted" targetRef="FbRun" />
+      <bpmn:sequenceFlow id="Flow_FbRun_GwRun" sourceRef="FbRun" targetRef="GwRun" />
+      <bpmn:sequenceFlow id="Flow_GwRun_RunCaseEnd" name="yes" sourceRef="GwRun" targetRef="RunCaseEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fbRun = ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwRun_Run" name="not yet" sourceRef="GwRun" targetRef="Run" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="KeepAlive" name="3 Keep one alive">
+      <bpmn:incoming>Flow_RunCase_KeepAlive</bpmn:incoming>
+      <bpmn:outgoing>Flow_KeepAlive_BreakIt</bpmn:outgoing>
+      <bpmn:startEvent id="KeepAliveStart">
+        <bpmn:outgoing>Flow_KeepAliveStart_Alive</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="KeepAliveEnd" name="Step done">
+        <bpmn:incoming>Flow_GwAlive_KeepAliveEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="CheckActive" name="Check: an active instance">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source='=cfg.engineUrl + "/v2/process-instances/search"' target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={filter: {processDefinitionId: cfg.caseId, state: "ACTIVE"}}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value="={activeCount: response.body.page.totalItems}" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_Alive_CheckActive</bpmn:incoming>
+        <bpmn:outgoing>Flow_CheckActive_FbAlive</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Alive" name="S01 · 3 Keep one alive">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-alive" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_KeepAliveStart_Alive</bpmn:incoming>
+        <bpmn:incoming>Flow_GwAlive_Alive</bpmn:incoming>
+        <bpmn:outgoing>Flow_Alive_CheckActive</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="FbAlive" name="Check the answers">
+        <bpmn:extensionElements><zeebe:script expression='=if (activeCount &gt;= 1) then "" else "Not yet. " + (if activeCount &gt;= 1 then "" else "The engine has no active instance of " + cfg.caseId + ". Start one and leave Review request open in Tasklist. ")' resultVariable="fbAlive" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CheckActive_FbAlive</bpmn:incoming>
+        <bpmn:outgoing>Flow_FbAlive_GwAlive</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:exclusiveGateway id="GwAlive" name="Step passed?" default="Flow_GwAlive_Alive">
+        <bpmn:incoming>Flow_FbAlive_GwAlive</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwAlive_KeepAliveEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwAlive_Alive</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_KeepAliveStart_Alive" sourceRef="KeepAliveStart" targetRef="Alive" />
+      <bpmn:sequenceFlow id="Flow_Alive_CheckActive" sourceRef="Alive" targetRef="CheckActive" />
+      <bpmn:sequenceFlow id="Flow_CheckActive_FbAlive" sourceRef="CheckActive" targetRef="FbAlive" />
+      <bpmn:sequenceFlow id="Flow_FbAlive_GwAlive" sourceRef="FbAlive" targetRef="GwAlive" />
+      <bpmn:sequenceFlow id="Flow_GwAlive_KeepAliveEnd" name="yes" sourceRef="GwAlive" targetRef="KeepAliveEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fbAlive = ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwAlive_Alive" name="not yet" sourceRef="GwAlive" targetRef="Alive" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="BreakIt" name="4 Break it on purpose">
+      <bpmn:incoming>Flow_KeepAlive_BreakIt</bpmn:incoming>
+      <bpmn:outgoing>Flow_BreakIt_CleanUp</bpmn:outgoing>
+      <bpmn:startEvent id="BreakItStart">
+        <bpmn:outgoing>Flow_BreakItStart_Break</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="BreakItEnd" name="Step done">
+        <bpmn:incoming>Flow_GwBreak_BreakItEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="CheckVersions" name="Check: two versions">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source='=cfg.engineUrl + "/v2/process-definitions/search"' target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source="={filter: {processDefinitionId: cfg.caseId}}" target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value="={caseVersions: response.body.page.totalItems}" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_Break_CheckVersions</bpmn:incoming>
+        <bpmn:outgoing>Flow_CheckVersions_CheckNewId</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="CheckNewId" name="Check: the new process">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source='=cfg.engineUrl + "/v2/process-definitions/search"' target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source="={filter: {processDefinitionId: cfg.testId}}" target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value="={testIdCount: response.body.page.totalItems}" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CheckVersions_CheckNewId</bpmn:incoming>
+        <bpmn:outgoing>Flow_CheckNewId_FbBreak</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Break" name="S01 · 4 Break it on purpose">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-break" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_BreakItStart_Break</bpmn:incoming>
+        <bpmn:incoming>Flow_GwBreak_Break</bpmn:incoming>
+        <bpmn:outgoing>Flow_Break_CheckVersions</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="FbBreak" name="Check the answers">
+        <bpmn:extensionElements><zeebe:script expression='=if (caseVersions &gt;= 2) and (testIdCount &gt;= 1) and (nameChange = "newVersion" and idChange = "newProcess") then "" else "Not yet. " + (if caseVersions &gt;= 2 then "" else "Only one version of " + cfg.caseId + ". Change the name only and deploy again. ") + (if testIdCount &gt;= 1 then "" else "No process with id " + cfg.testId + ". Change the id only and deploy. ") + (if nameChange = "newVersion" and idChange = "newProcess" then "" else "Compare what Operate shows after each deploy: how many processes, how many versions? ")' resultVariable="fbBreak" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CheckNewId_FbBreak</bpmn:incoming>
+        <bpmn:outgoing>Flow_FbBreak_GwBreak</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:exclusiveGateway id="GwBreak" name="Step passed?" default="Flow_GwBreak_Break">
+        <bpmn:incoming>Flow_FbBreak_GwBreak</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwBreak_BreakItEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwBreak_Break</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_BreakItStart_Break" sourceRef="BreakItStart" targetRef="Break" />
+      <bpmn:sequenceFlow id="Flow_Break_CheckVersions" sourceRef="Break" targetRef="CheckVersions" />
+      <bpmn:sequenceFlow id="Flow_CheckVersions_CheckNewId" sourceRef="CheckVersions" targetRef="CheckNewId" />
+      <bpmn:sequenceFlow id="Flow_CheckNewId_FbBreak" sourceRef="CheckNewId" targetRef="FbBreak" />
+      <bpmn:sequenceFlow id="Flow_FbBreak_GwBreak" sourceRef="FbBreak" targetRef="GwBreak" />
+      <bpmn:sequenceFlow id="Flow_GwBreak_BreakItEnd" name="yes" sourceRef="GwBreak" targetRef="BreakItEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fbBreak = ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwBreak_Break" name="not yet" sourceRef="GwBreak" targetRef="Break" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="CleanUp" name="5 Clean up">
+      <bpmn:incoming>Flow_BreakIt_CleanUp</bpmn:incoming>
+      <bpmn:outgoing>Flow_CleanUp_Review</bpmn:outgoing>
+      <bpmn:startEvent id="CleanUpStart">
+        <bpmn:outgoing>Flow_CleanUpStart_Cleanup</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="CleanUpEnd" name="Step done">
+        <bpmn:incoming>Flow_GwCleanup_CleanUpEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="CheckDeleted" name="Check: the new process is gone">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source='=cfg.engineUrl + "/v2/process-definitions/search"' target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source="={filter: {processDefinitionId: cfg.testId}}" target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value="={testIdLeft: response.body.page.totalItems}" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_Cleanup_CheckDeleted</bpmn:incoming>
+        <bpmn:outgoing>Flow_CheckDeleted_FbCleanup</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Cleanup" name="S01 · 5 Clean up">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-cleanup" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CleanUpStart_Cleanup</bpmn:incoming>
+        <bpmn:incoming>Flow_GwCleanup_Cleanup</bpmn:incoming>
+        <bpmn:outgoing>Flow_Cleanup_CheckDeleted</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="FbCleanup" name="Check the answers">
+        <bpmn:extensionElements><zeebe:script expression='=if (testIdLeft = 0) and (deleteV1 = "blocked") and (deleteFinished = "deleted") then "" else "Not yet. " + (if testIdLeft = 0 then "" else "Operate still has a process with id " + cfg.testId + ". Delete every version of it (cancel its running instances first) and wait a few seconds before you complete this task. ") + (if deleteV1 = "blocked" then "" else "Question 1: hover over Delete on version 1 of student-request and read why. ") + (if deleteFinished = "deleted" then "" else "Question 2: read the list in the Delete dialog. ")' resultVariable="fbCleanup" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_CheckDeleted_FbCleanup</bpmn:incoming>
+        <bpmn:outgoing>Flow_FbCleanup_GwCleanup</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:exclusiveGateway id="GwCleanup" name="Step passed?" default="Flow_GwCleanup_Cleanup">
+        <bpmn:incoming>Flow_FbCleanup_GwCleanup</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwCleanup_CleanUpEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwCleanup_Cleanup</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_CleanUpStart_Cleanup" sourceRef="CleanUpStart" targetRef="Cleanup" />
+      <bpmn:sequenceFlow id="Flow_Cleanup_CheckDeleted" sourceRef="Cleanup" targetRef="CheckDeleted" />
+      <bpmn:sequenceFlow id="Flow_CheckDeleted_FbCleanup" sourceRef="CheckDeleted" targetRef="FbCleanup" />
+      <bpmn:sequenceFlow id="Flow_FbCleanup_GwCleanup" sourceRef="FbCleanup" targetRef="GwCleanup" />
+      <bpmn:sequenceFlow id="Flow_GwCleanup_CleanUpEnd" name="yes" sourceRef="GwCleanup" targetRef="CleanUpEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fbCleanup = ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwCleanup_Cleanup" name="not yet" sourceRef="GwCleanup" targetRef="Cleanup" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Review" name="6–7 Self-check and compare">
+      <bpmn:incoming>Flow_CleanUp_Review</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review_SendResults</bpmn:outgoing>
+      <bpmn:startEvent id="ReviewStart">
+        <bpmn:outgoing>Flow_ReviewStart_SelfCheck</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="ReviewEnd" name="Step done">
+        <bpmn:incoming>Flow_Compare_ReviewEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:userTask id="SelfCheck" name="S01 · 6 Self-check">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-self-check" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_ReviewStart_SelfCheck</bpmn:incoming>
+        <bpmn:outgoing>Flow_SelfCheck_Compare</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:userTask id="Compare" name="S01 · 7 Compare with the model answers">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-compare" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_SelfCheck_Compare</bpmn:incoming>
+        <bpmn:outgoing>Flow_Compare_ReviewEnd</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_ReviewStart_SelfCheck" sourceRef="ReviewStart" targetRef="SelfCheck" />
+      <bpmn:sequenceFlow id="Flow_SelfCheck_Compare" sourceRef="SelfCheck" targetRef="Compare" />
+      <bpmn:sequenceFlow id="Flow_Compare_ReviewEnd" sourceRef="Compare" targetRef="ReviewEnd" />
+    </bpmn:subProcess>
+    <bpmn:subProcess id="SendResults" name="Send the results">
+      <bpmn:incoming>Flow_Review_SendResults</bpmn:incoming>
+      <bpmn:outgoing>Flow_SendResults_End</bpmn:outgoing>
+      <bpmn:startEvent id="SendResultsStart">
+        <bpmn:outgoing>Flow_SendResultsStart_GwSend</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="SendResultsEnd" name="Step done">
+        <bpmn:incoming>Flow_GwSend_SendResultsEnd</bpmn:incoming>
+        <bpmn:incoming>Flow_Send_SendResultsEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:exclusiveGateway id="GwSend" name="Results sheet set?" default="Flow_GwSend_SendResultsEnd">
+        <bpmn:incoming>Flow_SendResultsStart_GwSend</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwSend_Send</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwSend_SendResultsEnd</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:serviceTask id="Send" name="Send the results to the teacher">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source="=cfg.resultsUrl" target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={token: "p2a-camunda-2026", session: "s01", finishedAt: string(now()), rut: rut, lastName: lastName, firstName: firstName, studentEmail: studentEmail, a1: string join(a1, "+"), a2: a2, a3: a3, checkpoint1: checkpoint1, nameChange: nameChange, idChange: idChange, checkpoint2: checkpoint2, deleteV1: deleteV1, deleteFinished: deleteFinished, self1: self1, self2: self2, self3: self3, rateCheckpoint2: rateCheckpoint2, rateSelf1: rateSelf1, rateSelf2: rateSelf2, rateSelf3: rateSelf3}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_GwSend_Send</bpmn:incoming>
+        <bpmn:outgoing>Flow_Send_SendResultsEnd</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:boundaryEvent id="SendFailed" name="Not sent" attachedToRef="Send">
+        <bpmn:outgoing>Flow_SendFailed_TellTeacher</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_SendFailed" errorRef="Error_SEND_FAILED" />
+      </bpmn:boundaryEvent>
+      <bpmn:userTask id="TellTeacher" name="S01 · Results not sent: tell the teacher">
+        <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s01-not-sent" /></bpmn:extensionElements>
+        <bpmn:incoming>Flow_SendFailed_TellTeacher</bpmn:incoming>
+        <bpmn:outgoing>Flow_TellTeacher_SendResultsNotSent</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="SendResultsNotSent" name="Teacher told">
+        <bpmn:incoming>Flow_TellTeacher_SendResultsNotSent</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_SendResultsStart_GwSend" sourceRef="SendResultsStart" targetRef="GwSend" />
+      <bpmn:sequenceFlow id="Flow_SendFailed_TellTeacher" sourceRef="SendFailed" targetRef="TellTeacher" />
+      <bpmn:sequenceFlow id="Flow_GwSend_Send" name="yes" sourceRef="GwSend" targetRef="Send">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cfg.resultsUrl != ""</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwSend_SendResultsEnd" name="no" sourceRef="GwSend" targetRef="SendResultsEnd" />
+      <bpmn:sequenceFlow id="Flow_Send_SendResultsEnd" sourceRef="Send" targetRef="SendResultsEnd" />
+      <bpmn:sequenceFlow id="Flow_TellTeacher_SendResultsNotSent" sourceRef="TellTeacher" targetRef="SendResultsNotSent" />
+    </bpmn:subProcess>
+    <bpmn:endEvent id="End" name="Class completed">
+      <bpmn:incoming>Flow_SendResults_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Start_Config" sourceRef="Start" targetRef="Config" />
+    <bpmn:sequenceFlow id="Flow_Config_WorkedExample" sourceRef="Config" targetRef="WorkedExample" />
+    <bpmn:sequenceFlow id="Flow_WorkedExample_RunCase" sourceRef="WorkedExample" targetRef="RunCase" />
+    <bpmn:sequenceFlow id="Flow_RunCase_KeepAlive" sourceRef="RunCase" targetRef="KeepAlive" />
+    <bpmn:sequenceFlow id="Flow_KeepAlive_BreakIt" sourceRef="KeepAlive" targetRef="BreakIt" />
+    <bpmn:sequenceFlow id="Flow_BreakIt_CleanUp" sourceRef="BreakIt" targetRef="CleanUp" />
+    <bpmn:sequenceFlow id="Flow_CleanUp_Review" sourceRef="CleanUp" targetRef="Review" />
+    <bpmn:sequenceFlow id="Flow_Review_SendResults" sourceRef="Review" targetRef="SendResults" />
+    <bpmn:sequenceFlow id="Flow_SendResults_End" sourceRef="SendResults" targetRef="End" />
+  </bpmn:process>
+  <bpmn:error id="Error_SEND_FAILED" name="Results not sent" errorCode="SEND_FAILED" />
+  <bpmndi:BPMNDiagram id="Diagram_class_s01">
+    <bpmndi:BPMNPlane id="Plane_class_s01" bpmnElement="class-s01">
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Config_di" bpmnElement="Config"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="WorkedExample_di" bpmnElement="WorkedExample" isExpanded="false"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RunCase_di" bpmnElement="RunCase" isExpanded="false"><dc:Bounds x="600" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="KeepAlive_di" bpmnElement="KeepAlive" isExpanded="false"><dc:Bounds x="770" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BreakIt_di" bpmnElement="BreakIt" isExpanded="false"><dc:Bounds x="940" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CleanUp_di" bpmnElement="CleanUp" isExpanded="false"><dc:Bounds x="1110" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Review_di" bpmnElement="Review" isExpanded="false"><dc:Bounds x="1280" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendResults_di" bpmnElement="SendResults" isExpanded="false"><dc:Bounds x="1450" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End"><dc:Bounds x="1657" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_Config_di" bpmnElement="Flow_Start_Config"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Config_WorkedExample_di" bpmnElement="Flow_Config_WorkedExample"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_WorkedExample_RunCase_di" bpmnElement="Flow_WorkedExample_RunCase"><di:waypoint x="540" y="145" /><di:waypoint x="600" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_RunCase_KeepAlive_di" bpmnElement="Flow_RunCase_KeepAlive"><di:waypoint x="710" y="145" /><di:waypoint x="770" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_KeepAlive_BreakIt_di" bpmnElement="Flow_KeepAlive_BreakIt"><di:waypoint x="880" y="145" /><di:waypoint x="940" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_BreakIt_CleanUp_di" bpmnElement="Flow_BreakIt_CleanUp"><di:waypoint x="1050" y="145" /><di:waypoint x="1110" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CleanUp_Review_di" bpmnElement="Flow_CleanUp_Review"><di:waypoint x="1220" y="145" /><di:waypoint x="1280" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Review_SendResults_di" bpmnElement="Flow_Review_SendResults"><di:waypoint x="1390" y="145" /><di:waypoint x="1450" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendResults_End_di" bpmnElement="Flow_SendResults_End"><di:waypoint x="1560" y="145" /><di:waypoint x="1657" y="145" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_WorkedExample">
+    <bpmndi:BPMNPlane id="Plane_WorkedExample" bpmnElement="WorkedExample">
+      <bpmndi:BPMNShape id="WorkedExampleStart_di" bpmnElement="WorkedExampleStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PartA_di" bpmnElement="PartA"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FbPartA_di" bpmnElement="FbPartA"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwPartA_di" bpmnElement="GwPartA" isMarkerVisible="true"><dc:Bounds x="630" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="WorkedExampleEnd_di" bpmnElement="WorkedExampleEnd"><dc:Bounds x="807" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_WorkedExampleStart_PartA_di" bpmnElement="Flow_WorkedExampleStart_PartA"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_PartA_FbPartA_di" bpmnElement="Flow_PartA_FbPartA"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FbPartA_GwPartA_di" bpmnElement="Flow_FbPartA_GwPartA"><di:waypoint x="540" y="145" /><di:waypoint x="630" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwPartA_WorkedExampleEnd_di" bpmnElement="Flow_GwPartA_WorkedExampleEnd"><di:waypoint x="680" y="145" /><di:waypoint x="807" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwPartA_PartA_di" bpmnElement="Flow_GwPartA_PartA"><di:waypoint x="655" y="170" /><di:waypoint x="655" y="230" /><di:waypoint x="315" y="230" /><di:waypoint x="315" y="185" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_RunCase">
+    <bpmndi:BPMNPlane id="Plane_RunCase" bpmnElement="RunCase">
+      <bpmndi:BPMNShape id="RunCaseStart_di" bpmnElement="RunCaseStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Run_di" bpmnElement="Run"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckCompleted_di" bpmnElement="CheckCompleted"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FbRun_di" bpmnElement="FbRun"><dc:Bounds x="600" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwRun_di" bpmnElement="GwRun" isMarkerVisible="true"><dc:Bounds x="800" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RunCaseEnd_di" bpmnElement="RunCaseEnd"><dc:Bounds x="977" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_RunCaseStart_Run_di" bpmnElement="Flow_RunCaseStart_Run"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Run_CheckCompleted_di" bpmnElement="Flow_Run_CheckCompleted"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckCompleted_FbRun_di" bpmnElement="Flow_CheckCompleted_FbRun"><di:waypoint x="540" y="145" /><di:waypoint x="600" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FbRun_GwRun_di" bpmnElement="Flow_FbRun_GwRun"><di:waypoint x="710" y="145" /><di:waypoint x="800" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwRun_RunCaseEnd_di" bpmnElement="Flow_GwRun_RunCaseEnd"><di:waypoint x="850" y="145" /><di:waypoint x="977" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwRun_Run_di" bpmnElement="Flow_GwRun_Run"><di:waypoint x="825" y="170" /><di:waypoint x="825" y="230" /><di:waypoint x="315" y="230" /><di:waypoint x="315" y="185" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_KeepAlive">
+    <bpmndi:BPMNPlane id="Plane_KeepAlive" bpmnElement="KeepAlive">
+      <bpmndi:BPMNShape id="KeepAliveStart_di" bpmnElement="KeepAliveStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Alive_di" bpmnElement="Alive"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckActive_di" bpmnElement="CheckActive"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FbAlive_di" bpmnElement="FbAlive"><dc:Bounds x="600" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwAlive_di" bpmnElement="GwAlive" isMarkerVisible="true"><dc:Bounds x="800" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="KeepAliveEnd_di" bpmnElement="KeepAliveEnd"><dc:Bounds x="977" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_KeepAliveStart_Alive_di" bpmnElement="Flow_KeepAliveStart_Alive"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Alive_CheckActive_di" bpmnElement="Flow_Alive_CheckActive"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckActive_FbAlive_di" bpmnElement="Flow_CheckActive_FbAlive"><di:waypoint x="540" y="145" /><di:waypoint x="600" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FbAlive_GwAlive_di" bpmnElement="Flow_FbAlive_GwAlive"><di:waypoint x="710" y="145" /><di:waypoint x="800" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwAlive_KeepAliveEnd_di" bpmnElement="Flow_GwAlive_KeepAliveEnd"><di:waypoint x="850" y="145" /><di:waypoint x="977" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwAlive_Alive_di" bpmnElement="Flow_GwAlive_Alive"><di:waypoint x="825" y="170" /><di:waypoint x="825" y="230" /><di:waypoint x="315" y="230" /><di:waypoint x="315" y="185" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_BreakIt">
+    <bpmndi:BPMNPlane id="Plane_BreakIt" bpmnElement="BreakIt">
+      <bpmndi:BPMNShape id="BreakItStart_di" bpmnElement="BreakItStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Break_di" bpmnElement="Break"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckVersions_di" bpmnElement="CheckVersions"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckNewId_di" bpmnElement="CheckNewId"><dc:Bounds x="600" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FbBreak_di" bpmnElement="FbBreak"><dc:Bounds x="770" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwBreak_di" bpmnElement="GwBreak" isMarkerVisible="true"><dc:Bounds x="970" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BreakItEnd_di" bpmnElement="BreakItEnd"><dc:Bounds x="1147" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_BreakItStart_Break_di" bpmnElement="Flow_BreakItStart_Break"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Break_CheckVersions_di" bpmnElement="Flow_Break_CheckVersions"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckVersions_CheckNewId_di" bpmnElement="Flow_CheckVersions_CheckNewId"><di:waypoint x="540" y="145" /><di:waypoint x="600" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckNewId_FbBreak_di" bpmnElement="Flow_CheckNewId_FbBreak"><di:waypoint x="710" y="145" /><di:waypoint x="770" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FbBreak_GwBreak_di" bpmnElement="Flow_FbBreak_GwBreak"><di:waypoint x="880" y="145" /><di:waypoint x="970" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwBreak_BreakItEnd_di" bpmnElement="Flow_GwBreak_BreakItEnd"><di:waypoint x="1020" y="145" /><di:waypoint x="1147" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwBreak_Break_di" bpmnElement="Flow_GwBreak_Break"><di:waypoint x="995" y="170" /><di:waypoint x="995" y="230" /><di:waypoint x="315" y="230" /><di:waypoint x="315" y="185" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_CleanUp">
+    <bpmndi:BPMNPlane id="Plane_CleanUp" bpmnElement="CleanUp">
+      <bpmndi:BPMNShape id="CleanUpStart_di" bpmnElement="CleanUpStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Cleanup_di" bpmnElement="Cleanup"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckDeleted_di" bpmnElement="CheckDeleted"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FbCleanup_di" bpmnElement="FbCleanup"><dc:Bounds x="600" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwCleanup_di" bpmnElement="GwCleanup" isMarkerVisible="true"><dc:Bounds x="800" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CleanUpEnd_di" bpmnElement="CleanUpEnd"><dc:Bounds x="977" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_CleanUpStart_Cleanup_di" bpmnElement="Flow_CleanUpStart_Cleanup"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Cleanup_CheckDeleted_di" bpmnElement="Flow_Cleanup_CheckDeleted"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_CheckDeleted_FbCleanup_di" bpmnElement="Flow_CheckDeleted_FbCleanup"><di:waypoint x="540" y="145" /><di:waypoint x="600" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_FbCleanup_GwCleanup_di" bpmnElement="Flow_FbCleanup_GwCleanup"><di:waypoint x="710" y="145" /><di:waypoint x="800" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwCleanup_CleanUpEnd_di" bpmnElement="Flow_GwCleanup_CleanUpEnd"><di:waypoint x="850" y="145" /><di:waypoint x="977" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwCleanup_Cleanup_di" bpmnElement="Flow_GwCleanup_Cleanup"><di:waypoint x="825" y="170" /><di:waypoint x="825" y="230" /><di:waypoint x="315" y="230" /><di:waypoint x="315" y="185" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_Review">
+    <bpmndi:BPMNPlane id="Plane_Review" bpmnElement="Review">
+      <bpmndi:BPMNShape id="ReviewStart_di" bpmnElement="ReviewStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SelfCheck_di" bpmnElement="SelfCheck"><dc:Bounds x="260" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Compare_di" bpmnElement="Compare"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReviewEnd_di" bpmnElement="ReviewEnd"><dc:Bounds x="637" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_ReviewStart_SelfCheck_di" bpmnElement="Flow_ReviewStart_SelfCheck"><di:waypoint x="163" y="145" /><di:waypoint x="260" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SelfCheck_Compare_di" bpmnElement="Flow_SelfCheck_Compare"><di:waypoint x="370" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Compare_ReviewEnd_di" bpmnElement="Flow_Compare_ReviewEnd"><di:waypoint x="540" y="145" /><di:waypoint x="637" y="145" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="Diagram_SendResults">
+    <bpmndi:BPMNPlane id="Plane_SendResults" bpmnElement="SendResults">
+      <bpmndi:BPMNShape id="SendResultsStart_di" bpmnElement="SendResultsStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwSend_di" bpmnElement="GwSend" isMarkerVisible="true"><dc:Bounds x="290" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Send_di" bpmnElement="Send"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendResultsEnd_di" bpmnElement="SendResultsEnd"><dc:Bounds x="637" y="257" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TellTeacher_di" bpmnElement="TellTeacher"><dc:Bounds x="600" y="365" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendResultsNotSent_di" bpmnElement="SendResultsNotSent"><dc:Bounds x="807" y="387" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendFailed_di" bpmnElement="SendFailed"><dc:Bounds x="496" y="167" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="534" y="199" width="70" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_SendResultsStart_GwSend_di" bpmnElement="Flow_SendResultsStart_GwSend"><di:waypoint x="163" y="145" /><di:waypoint x="290" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendFailed_TellTeacher_di" bpmnElement="Flow_SendFailed_TellTeacher"><di:waypoint x="514" y="203" /><di:waypoint x="514" y="405" /><di:waypoint x="600" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwSend_Send_di" bpmnElement="Flow_GwSend_Send"><di:waypoint x="340" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwSend_SendResultsEnd_di" bpmnElement="Flow_GwSend_SendResultsEnd"><di:waypoint x="315" y="170" /><di:waypoint x="315" y="275" /><di:waypoint x="637" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Send_SendResultsEnd_di" bpmnElement="Flow_Send_SendResultsEnd"><di:waypoint x="540" y="145" /><di:waypoint x="588" y="145" /><di:waypoint x="588" y="275" /><di:waypoint x="637" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TellTeacher_SendResultsNotSent_di" bpmnElement="Flow_TellTeacher_SendResultsNotSent"><di:waypoint x="710" y="405" /><di:waypoint x="807" y="405" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

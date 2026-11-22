@@ -1,0 +1,131 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · 1 Worked example\n*Guide: Step 1.*",
+      "id": "class_s03_part_a_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbPartA}}",
+      "conditional": {
+        "hide": "=fbPartA = null or fbPartA = \"\""
+      },
+      "id": "class_s03_part_a_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_part_a_2"
+    },
+    {
+      "type": "text",
+      "text": "### Questions\nAnswer from what the teacher showed in Operate.",
+      "id": "class_s03_part_a_3"
+    },
+    {
+      "type": "radio",
+      "key": "a1",
+      "label": "1. After the gateway that follows Goods to ship, how many tokens are there?",
+      "values": [
+        {
+          "label": "One",
+          "value": "one"
+        },
+        {
+          "label": "Two",
+          "value": "two"
+        },
+        {
+          "label": "It depends on the conditions",
+          "value": "depends"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_part_a_4"
+    },
+    {
+      "type": "checklist",
+      "key": "a2",
+      "label": "2. With post and extra insurance, which two tasks appear at the same time?",
+      "values": [
+        {
+          "label": "Fill in a post label",
+          "value": "label"
+        },
+        {
+          "label": "Take out extra insurance",
+          "value": "insurance"
+        },
+        {
+          "label": "Request quotes from carriers",
+          "value": "quotes"
+        },
+        {
+          "label": "Package goods",
+          "value": "package"
+        },
+        {
+          "label": "Add paperwork and move package to pick area",
+          "value": "pick"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_part_a_5"
+    },
+    {
+      "type": "radio",
+      "key": "a2b",
+      "label": "3. The gateway after those two tasks (an inclusive join) waits for...",
+      "values": [
+        {
+          "label": "the branches this instance started",
+          "value": "started"
+        },
+        {
+          "label": "all its incoming branches, always",
+          "value": "all"
+        },
+        {
+          "label": "the first branch that arrives",
+          "value": "first"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_part_a_6"
+    },
+    {
+      "type": "radio",
+      "key": "a3",
+      "label": "4. Why is the merge of the two delivery modes an exclusive gateway and not a parallel one?",
+      "values": [
+        {
+          "label": "Only one of the two branches runs; a parallel join would wait forever for the other",
+          "value": "onlyOne"
+        },
+        {
+          "label": "An exclusive merge is faster",
+          "value": "faster"
+        },
+        {
+          "label": "There is no difference: both pass the token on",
+          "value": "same"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_part_a_7"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-part-a",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

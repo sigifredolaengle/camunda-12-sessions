@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · 4 Notifications\n*Guide: Step 4.*",
+      "id": "class_s03_notify_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbNotif}}",
+      "conditional": {
+        "hide": "=fbNotif = null or fbNotif = \"\""
+      },
+      "id": "class_s03_notify_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_notify_2"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\n- your latest version has two inclusive gateways: *Who must be informed?* and the join\n- it has no parallel gateway\n- script tasks save `studentMessage`, `instructorMessage` and `registrarMessage`",
+      "id": "class_s03_notify_3"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-notify",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

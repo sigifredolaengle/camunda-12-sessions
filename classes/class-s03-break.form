@@ -1,0 +1,86 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · 6 Break it and repair it\n*Guide: Step 6.*",
+      "id": "class_s03_break_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbBreak}}",
+      "conditional": {
+        "hide": "=fbBreak = null or fbBreak = \"\""
+      },
+      "id": "class_s03_break_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_break_2"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\n- the engine saw a condition incident in **student-request**\n- no instance is still stopped at that incident (you cancelled it)\n- your latest version has its two default flows again",
+      "id": "class_s03_break_3"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_break_4"
+    },
+    {
+      "type": "text",
+      "text": "### Questions\nAnswer from what you saw.",
+      "id": "class_s03_break_5"
+    },
+    {
+      "type": "radio",
+      "key": "deployError",
+      "label": "1. When the arrow rejected was neither default nor conditional, the deploy...",
+      "values": [
+        {
+          "label": "failed: the arrow must have a condition or be the default flow",
+          "value": "rejected"
+        },
+        {
+          "label": "worked, with a warning",
+          "value": "ok"
+        },
+        {
+          "label": "worked: the engine ignores that arrow",
+          "value": "ignored"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_break_6"
+    },
+    {
+      "type": "radio",
+      "key": "incidentMsg",
+      "label": "2. With the arrow deleted and the request rejected, Operate showed...",
+      "values": [
+        {
+          "label": "an incident at Approved?: no condition was true and there was no default flow",
+          "value": "noFlow"
+        },
+        {
+          "label": "the token waiting at Approved?, without an incident",
+          "value": "waiting"
+        },
+        {
+          "label": "the instance completed through Register decision",
+          "value": "approved"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_break_7"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-break",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

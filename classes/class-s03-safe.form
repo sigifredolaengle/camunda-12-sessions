@@ -1,0 +1,118 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · 2 Safe conditions\n*Guide: Step 2.*",
+      "id": "class_s03_safe_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbSafe}}",
+      "conditional": {
+        "hide": "=fbSafe = null or fbSafe = \"\""
+      },
+      "id": "class_s03_safe_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_safe_2"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\n- your condition in question 4 is valid FEEL\n- it gives false when days is missing, false with 5 and true with 20",
+      "id": "class_s03_safe_3"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_safe_4"
+    },
+    {
+      "type": "text",
+      "text": "### Questions\nAnswer from what you saw.",
+      "id": "class_s03_safe_5"
+    },
+    {
+      "type": "radio",
+      "key": "sc1",
+      "label": "1. A gateway has the condition canHandle = true and a default flow. canHandle does not exist. What happens?",
+      "values": [
+        {
+          "label": "The condition is false: the default flow is taken",
+          "value": "default"
+        },
+        {
+          "label": "Incident: the variable is missing",
+          "value": "incident"
+        },
+        {
+          "label": "The condition is true",
+          "value": "true"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_safe_6"
+    },
+    {
+      "type": "radio",
+      "key": "sc2",
+      "label": "2. Now the condition is deliveryDays > 2 and deliveryDays does not exist. What happens?",
+      "values": [
+        {
+          "label": "The condition is false: the default flow is taken",
+          "value": "default"
+        },
+        {
+          "label": "Incident: the gateway needs true or false and gets null",
+          "value": "incident"
+        },
+        {
+          "label": "The engine takes deliveryDays as 0",
+          "value": "zero"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_safe_7"
+    },
+    {
+      "type": "radio",
+      "key": "sc3",
+      "label": "3. In BPMN, where is a condition written?",
+      "values": [
+        {
+          "label": "On the sequence flow (the arrow) that leaves the gateway",
+          "value": "flow"
+        },
+        {
+          "label": "On the gateway",
+          "value": "gateway"
+        },
+        {
+          "label": "On the task after the gateway",
+          "value": "task"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_safe_8"
+    },
+    {
+      "type": "textfield",
+      "key": "feelSafe",
+      "label": "4. Type a condition that is true when days is greater than 14, and false (not an error) when days is missing.",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_safe_9"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-safe",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

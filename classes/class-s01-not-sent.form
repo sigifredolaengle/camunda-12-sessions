@@ -1,0 +1,21 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Your results were not sent\nThe engine could not reach the teacher's sheet (no internet?). Your work is done: tell the teacher, who can read your answers in Operate.",
+      "id": "class_s01_not_sent_0"
+    },
+    {
+      "type": "checkbox",
+      "key": "toldTeacher",
+      "label": "I told the teacher",
+      "defaultValue": false,
+      "id": "class_s01_not_sent_1"
+    }
+  ],
+  "type": "default",
+  "id": "class-s01-not-sent",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

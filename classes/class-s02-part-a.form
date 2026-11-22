@@ -1,0 +1,122 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Step 1: the worked example\nThe teacher runs the OMG *Hardware retailer* with forms and shows its variables in Operate. Watch, then answer.",
+      "id": "class_s02_part_a_0"
+    },
+    {
+      "type": "text",
+      "text": "**Feedback.** {{fbPartA}}",
+      "conditional": {
+        "hide": "=fbPartA = null or fbPartA = \"\""
+      },
+      "id": "class_s02_part_a_1"
+    },
+    {
+      "type": "checklist",
+      "key": "a1",
+      "label": "1. Which variables exist when the instance starts? (select all that apply)",
+      "values": [
+        {
+          "label": "orderId",
+          "value": "orderId"
+        },
+        {
+          "label": "weightKg",
+          "value": "weightKg"
+        },
+        {
+          "label": "orderValue",
+          "value": "orderValue"
+        },
+        {
+          "label": "deliveryMode",
+          "value": "deliveryMode"
+        },
+        {
+          "label": "insuranceRequired",
+          "value": "insuranceRequired"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_part_a_2"
+    },
+    {
+      "type": "radio",
+      "key": "a1b",
+      "label": "2. Which variable appears after *Decide if normal post or special shipment*?",
+      "values": [
+        {
+          "label": "deliveryMode",
+          "value": "deliveryMode"
+        },
+        {
+          "label": "orderValue",
+          "value": "orderValue"
+        },
+        {
+          "label": "None: a task only moves the token",
+          "value": "none"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_part_a_3"
+    },
+    {
+      "type": "radio",
+      "key": "a2",
+      "label": "3. The OMG model has data objects. What do they store in the engine?",
+      "values": [
+        {
+          "label": "Nothing: they document; the data is the instance's variables",
+          "value": "nothing"
+        },
+        {
+          "label": "The order, as a variable called like the data object",
+          "value": "order"
+        },
+        {
+          "label": "A file attached to the instance",
+          "value": "file"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_part_a_4"
+    },
+    {
+      "type": "radio",
+      "key": "a3",
+      "label": "4. The teacher changed orderValue in Operate. Where did the change show up?",
+      "values": [
+        {
+          "label": "In the next form that was opened: it showed the new value",
+          "value": "nextForm"
+        },
+        {
+          "label": "Nowhere: running instances keep the old value",
+          "value": "nowhere"
+        },
+        {
+          "label": "Only in new instances",
+          "value": "newInstances"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_part_a_5"
+    }
+  ],
+  "type": "default",
+  "id": "class-s02-part-a",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

@@ -1,0 +1,32 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Step 6: self-check\nAnswer in your own words. In the next step you compare with the model answers.",
+      "id": "class_s02_self_check_0"
+    },
+    {
+      "type": "textarea",
+      "key": "self1",
+      "label": "Why string(today() + duration(\"P5D\")) and not today() + 5?",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_self_check_1"
+    },
+    {
+      "type": "textarea",
+      "key": "self2",
+      "label": "A form creates a variable. Where does it live, and how do you see or change it while the instance runs?",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_self_check_2"
+    }
+  ],
+  "type": "default",
+  "id": "class-s02-self-check",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

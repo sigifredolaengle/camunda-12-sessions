@@ -1,0 +1,52 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Session 2: Variables, FEEL and forms\nThis process guides today's class. Each step is a task in Tasklist: do what it says in the Modeler, Operate or Tasklist, then come back and complete the task. The engine checks your work before it lets you go on.\n\nYour answers go to the teacher at the end.",
+      "id": "class_s02_start_0"
+    },
+    {
+      "type": "textfield",
+      "key": "rut",
+      "label": "RUT",
+      "validate": {
+        "required": true
+      },
+      "description": "Format 12.345.678-5",
+      "id": "class_s02_start_1"
+    },
+    {
+      "type": "textfield",
+      "key": "lastName",
+      "label": "Last name(s)",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_start_2"
+    },
+    {
+      "type": "textfield",
+      "key": "firstName",
+      "label": "First name(s)",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_start_3"
+    },
+    {
+      "type": "textfield",
+      "key": "studentEmail",
+      "label": "E-mail",
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      },
+      "id": "class_s02_start_4"
+    }
+  ],
+  "type": "default",
+  "id": "class-s02-start",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

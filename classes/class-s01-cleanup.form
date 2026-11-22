@@ -1,0 +1,68 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Step 5: clean up\nThe process with the ID you invented in step 4 was a test: delete it. In Operate, *Processes*, choose it in **Name** and its version in **Version**, then **Delete** (top right), tick the confirmation and delete. If it had more than one version, delete each one.\n\nThe rules:\n- You delete **one version at a time**. A process disappears when its last version is deleted.\n- A version with **running instances** (active or with an incident) cannot be deleted: cancel them first.\n- Deleting a version deletes **all its finished instances** too, with their variables and history. There is no undo.\n- Other versions are not touched: if you delete the latest one, the previous one becomes the latest.\n\nDo **not** delete `student-request`: you need it all term.",
+      "id": "class_s01_cleanup_0"
+    },
+    {
+      "type": "text",
+      "text": "**Feedback.** {{fbCleanup}}",
+      "conditional": {
+        "hide": "=fbCleanup = null or fbCleanup = \"\""
+      },
+      "id": "class_s01_cleanup_1"
+    },
+    {
+      "type": "radio",
+      "key": "deleteV1",
+      "label": "1. Choose version 1 of student-request and hover over Delete (do not delete it). What does Operate say?",
+      "values": [
+        {
+          "label": "It cannot be deleted: it still has a running instance",
+          "value": "blocked"
+        },
+        {
+          "label": "It cancels the running instance and deletes the version",
+          "value": "cancels"
+        },
+        {
+          "label": "It can be deleted: only the latest version is protected",
+          "value": "allowed"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s01_cleanup_2"
+    },
+    {
+      "type": "radio",
+      "key": "deleteFinished",
+      "label": "2. When you delete a version, what happens to its completed instances?",
+      "values": [
+        {
+          "label": "They are deleted with it",
+          "value": "deleted"
+        },
+        {
+          "label": "They stay in Operate, without a version",
+          "value": "kept"
+        },
+        {
+          "label": "They move to the latest version",
+          "value": "moved"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s01_cleanup_3"
+    }
+  ],
+  "type": "default",
+  "id": "class-s01-cleanup",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

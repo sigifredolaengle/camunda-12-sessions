@@ -1,0 +1,40 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Step 3: due date, review form and summary\n1. After the start event, insert a **script task** *Compute due date*. Implementation: *FEEL expression* `string(today() + duration(\"P5D\"))`, result variable `dueDate`.\n2. Deploy `review-request-s02.form` (form ID `review-request`) and link it to *Review request*.\n3. Before the end, insert a script task *Build summary*: `\"Request of \" + studentName + \" (\" + requestType + \"): \" + decision`, result variable `summary`.\n4. Deploy the process. Start an instance from the Modeler with these variables:\n\n`{\"studentName\": \"Ana Rojas\", \"studentId\": \"19.876.543-0\", \"studentEmail\": \"ana@example.org\", \"requestType\": \"postponement\", \"course\": \"BPM\", \"days\": 7, \"reason\": \"medical leave\"}`\n\n5. In Tasklist, open *Review request*: the form shows Ana's data. Approve it. In Operate, open the completed instance and its *Variables*.",
+      "id": "class_s02_run_0"
+    },
+    {
+      "type": "text",
+      "text": "**Feedback.** {{fbRun}}",
+      "conditional": {
+        "hide": "=fbRun = null or fbRun = \"\""
+      },
+      "id": "class_s02_run_1"
+    },
+    {
+      "type": "textfield",
+      "key": "cpDueDate",
+      "label": "Checkpoint. The value of dueDate",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_run_2"
+    },
+    {
+      "type": "textfield",
+      "key": "cpSummary",
+      "label": "Checkpoint. The value of summary",
+      "validate": {
+        "required": true
+      },
+      "id": "class_s02_run_3"
+    }
+  ],
+  "type": "default",
+  "id": "class-s02-run",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}
