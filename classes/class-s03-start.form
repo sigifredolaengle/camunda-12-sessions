@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "text",
-      "text": "## S03 · Gateways\n**The guide tells you what to do. Tasklist tells you when you are done.**\n\n- The student guide has eight steps; each one is a task here with the same number.\n- Do the step in the guide, then open its task: it lists what the engine will check (*Done when*) and asks a few questions.\n- If something is missing, the same task comes back with **Feedback**.\n\nFill in your data to start.\n\nYour answers go to the teacher at the end.",
+      "text": "## S03 · End-of-session check\nStart this check when you have finished steps 3 to 6 of the guide. The engine reads your latest *student-request*, your three instances and the incident of step 6.\n\n- If something is missing, the task comes back with **Feedback**: fix it and complete the task again.\n- When everything is there, your result goes to the teacher.\n\nFill in your data to start.\n\nYour answers go to the teacher at the end.",
       "id": "class_s03_start_0"
     },
     {

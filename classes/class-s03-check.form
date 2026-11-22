@@ -1,0 +1,36 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S03 · Check your work\n*Guide: steps 3 to 6.*",
+      "id": "class_s03_check_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbCheck}}",
+      "conditional": {
+        "hide": "=fbCheck = null or fbCheck = \"\""
+      },
+      "id": "class_s03_check_1"
+    },
+    {
+      "type": "separator",
+      "id": "class_s03_check_2"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\n- your latest **student-request** is deployed (wait a few seconds after the deploy)\n- it has three exclusive gateways (*Type of request?*, *Approved?* and the merge) and two default flows\n- it has two inclusive gateways and no parallel gateway\n- script tasks save `certificateNumber`, `registered`, `letter`, `studentMessage`, `instructorMessage` and `registrarMessage`\n- three completed instances, one per path: certificate; postponement approved; recognition rejected\n- the engine saw the condition incident of step 6, and no instance is still stopped at it",
+      "id": "class_s03_check_3"
+    },
+    {
+      "type": "text",
+      "text": "Complete this task to run the check.",
+      "id": "class_s03_check_4"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-check",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}
