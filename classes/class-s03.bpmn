@@ -27,7 +27,7 @@
         <bpmn:outgoing>Flow_PartA_FbPartA</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:scriptTask id="FbPartA" name="Check the answers">
-        <bpmn:extensionElements><zeebe:script expression='=if (a1 = "two") and (count(a2) = 2 and list contains(a2, "label") and list contains(a2, "insurance")) and (a2b = "started") and (a3 = "onlyOne") then "" else "Not yet. " + (if a1 = "two" then "" else "Question 1: a parallel split sends a token down every branch. ") + (if count(a2) = 2 and list contains(a2, "label") and list contains(a2, "insurance") then "" else "Question 2: which two tasks follow the gateway after Check if extra insurance is necessary? ") + (if a2b = "started" then "" else "Question 3: watch Operate after you complete one of the two tasks. ") + (if a3 = "onlyOne" then "" else "Question 4: how many of the two delivery modes run in one instance? ")' resultVariable="fbPartA" /></bpmn:extensionElements>
+        <bpmn:extensionElements><zeebe:script expression='=if (a1 = "two") and (count(a2) = 2 and list contains(a2, "label") and list contains(a2, "insurance")) and (a2b = "started") and (a3 = "onlyOne") then "" else "Not yet. " + (if a1 = "two" then "" else "Question 1: a parallel split sends a token down every branch. ") + (if count(a2) = 2 and list contains(a2, "label") and list contains(a2, "insurance") then "" else "Question 2: which two tasks follow the gateway after Check if extra insurance is necessary? ") + (if a2b = "started" then "" else "Question 3: watch the token simulation after one of the two tasks finishes. ") + (if a3 = "onlyOne" then "" else "Question 4: how many of the two delivery modes run in one instance? ")' resultVariable="fbPartA" /></bpmn:extensionElements>
         <bpmn:incoming>Flow_PartA_FbPartA</bpmn:incoming>
         <bpmn:outgoing>Flow_FbPartA_GwPartA</bpmn:outgoing>
       </bpmn:scriptTask>
@@ -44,7 +44,7 @@
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_GwPartA_PartA" name="not yet" sourceRef="GwPartA" targetRef="PartA" />
     </bpmn:subProcess>
-    <bpmn:subProcess id="SafeConditions" name="2 Safe conditions">
+    <bpmn:subProcess id="SafeConditions" name="2 On the engine, safe conditions">
       <bpmn:incoming>Flow_WorkedExample_SafeConditions</bpmn:incoming>
       <bpmn:outgoing>Flow_SafeConditions_RouteDecide</bpmn:outgoing>
       <bpmn:startEvent id="SafeConditionsStart">
@@ -67,14 +67,14 @@
         <bpmn:incoming>Flow_SafeInvalid_NoSafe</bpmn:incoming>
         <bpmn:outgoing>Flow_NoSafe_FbSafe</bpmn:outgoing>
       </bpmn:scriptTask>
-      <bpmn:userTask id="Safe" name="S03 · 2 Safe conditions">
+      <bpmn:userTask id="Safe" name="S03 · 2 On the engine, safe conditions">
         <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s03-safe" /></bpmn:extensionElements>
         <bpmn:incoming>Flow_SafeConditionsStart_Safe</bpmn:incoming>
         <bpmn:incoming>Flow_GwSafe_Safe</bpmn:incoming>
         <bpmn:outgoing>Flow_Safe_EvalSafe</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:scriptTask id="FbSafe" name="Check the answers">
-        <bpmn:extensionElements><zeebe:script expression='=if (sc1 = "default") and (sc2 = "incident") and (sc3 = "flow") and (not(safeResult instance of string)) and (safeResult instance of string or safeResult = [false, false, true]) then "" else "Not yet. " + (if sc1 = "default" then "" else "Question 1: an equality with a missing value is false, not an error. ") + (if sc2 = "incident" then "" else "Question 2: what is null greater than 2? ") + (if sc3 = "flow" then "" else "Question 3: select the arrow, not the diamond. ") + (if not(safeResult instance of string) then "" else "Question 4: the engine could not read your condition. Check the words and, or, if, then, else. ") + (if safeResult instance of string or safeResult = [false, false, true] then "" else "Question 4: with days missing and with 5 the result must be false; with 20, true. A comparison with a missing days gives null. ")' resultVariable="fbSafe" /></bpmn:extensionElements>
+        <bpmn:extensionElements><zeebe:script expression='=if (ex1 = "form") and (ex2 = "default") and (ex3 = "label") and (sc1 = "default") and (sc2 = "incident") and (sc3 = "flow") and (not(safeResult instance of string)) and (safeResult instance of string or safeResult = [false, false, true]) then "" else "Not yet. " + (if ex1 = "form" then "" else "Question 1: open the form of Decide if normal post or special shipment: what is the key of its field? ") + (if ex2 = "default" then "" else "Question 2: look at the start of the arrow normal post: it has a small slash. ") + (if ex3 = "label" then "" else "Question 3: an unticked checkbox gives false, and false = true is false. ") + (if sc1 = "default" then "" else "Question 4: an equality with a missing value is false, not an error. ") + (if sc2 = "incident" then "" else "Question 5: what is null greater than 2? ") + (if sc3 = "flow" then "" else "Question 6: select the arrow, not the diamond. ") + (if not(safeResult instance of string) then "" else "Question 7: the engine could not read your condition. Check the words and, or, if, then, else. ") + (if safeResult instance of string or safeResult = [false, false, true] then "" else "Question 7: with days missing and with 5 the result must be false; with 20, true. A comparison with a missing days gives null. ")' resultVariable="fbSafe" /></bpmn:extensionElements>
         <bpmn:incoming>Flow_NoSafe_FbSafe</bpmn:incoming>
         <bpmn:incoming>Flow_EvalSafe_FbSafe</bpmn:incoming>
         <bpmn:outgoing>Flow_FbSafe_GwSafe</bpmn:outgoing>
@@ -362,7 +362,7 @@
         <bpmn:outgoing>Flow_GwSend_SendResultsEnd</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:serviceTask id="Send" name="Send the results to the teacher">
-        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source="=cfg.resultsUrl" target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={token: "p2a-camunda-2026", session: "s03", finishedAt: string(now()), rut: rut, lastName: lastName, firstName: firstName, studentEmail: studentEmail, a1: a1, a2: string join(a2, "+"), a2b: a2b, a3: a3, sc1: sc1, sc2: sc2, sc3: sc3, feelSafe: feelSafe, cpPost: string join(cpPost, "+"), cpRec: cpRec, deployError: deployError, incidentMsg: incidentMsg, self1: self1, self2: self2, self3: self3, rateSelf1: rateSelf1, rateSelf2: rateSelf2, rateSelf3: rateSelf3}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source="=cfg.resultsUrl" target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={token: "p2a-camunda-2026", session: "s03", finishedAt: string(now()), rut: rut, lastName: lastName, firstName: firstName, studentEmail: studentEmail, a1: a1, a2: string join(a2, "+"), a2b: a2b, a3: a3, ex1: ex1, ex2: ex2, ex3: ex3, sc1: sc1, sc2: sc2, sc3: sc3, feelSafe: feelSafe, cpPost: string join(cpPost, "+"), cpRec: cpRec, deployError: deployError, incidentMsg: incidentMsg, self1: self1, self2: self2, self3: self3, rateSelf1: rateSelf1, rateSelf2: rateSelf2, rateSelf3: rateSelf3}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
         <bpmn:incoming>Flow_GwSend_Send</bpmn:incoming>
         <bpmn:outgoing>Flow_Send_SendResultsEnd</bpmn:outgoing>
       </bpmn:serviceTask>
