@@ -19,7 +19,7 @@
     },
     {
       "type": "text",
-      "text": "### Done when\n- your latest **student-request** is deployed (wait a few seconds after the deploy)\n- it has three exclusive gateways (*Type of request?*, *Approved?* and the merge) and two default flows\n- it has two inclusive gateways and no parallel gateway\n- script tasks save `certificateNumber`, `registered`, `letter`, `studentMessage`, `instructorMessage` and `registrarMessage`\n- three completed instances, one per path: certificate; postponement approved; recognition rejected\n- the engine saw the condition incident of step 6, and no instance is still stopped at it",
+      "text": "### Done when\n- your latest `student-request` is deployed (wait a few seconds after the deploy)\n- it has three exclusive gateways (`Type of request?`, `Approved?` and the merge) and two default flows\n- it has two inclusive gateways and no parallel gateway\n- script tasks save `certificateNumber`, `registered`, `letter`, `studentMessage`, `instructorMessage` and `registrarMessage`\n- three completed instances, one per path: `requestType` = `\"certificate\"`; `\"postponement\"` with `decision` = `\"approved\"`; `\"recognition\"` with `decision` = `\"rejected\"`\n- the engine saw the condition incident of step 6, and no instance is still stopped at it",
       "id": "class_s03_check_3"
     },
     {
