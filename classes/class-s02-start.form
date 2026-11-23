@@ -10,7 +10,9 @@
       "key": "rut",
       "label": "RUT",
       "validate": {
-        "required": true
+        "required": true,
+        "validationType": "custom",
+        "pattern": "^[0-9]{1,2}\\.?[0-9]{3}\\.?[0-9]{3}-?[0-9kK]$"
       },
       "description": "Format 12.345.678-5",
       "id": "class_s02_start_1"

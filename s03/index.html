@@ -2068,24 +2068,126 @@ repair?</li>
 </ol>
 <h2 id="step-7-the-end-of-session-check">Step 7: the end-of-session
 check</h2>
-<p>In Tasklist, tab <em>Processes</em>:
-<code>S03 · End-of-session check</code> → <em>Start process</em>
-(<em>Iniciar proceso</em>), and fill in your RUT, names and e-mail. Then
-complete the task <code>S03 · Check your work</code>.</p>
-<p>The engine reads your latest <code>student-request</code>, your three
-instances and the incident of step 6. If something is missing, the task
-comes back with <strong>Feedback</strong>: fix it and complete the task
-again. When everything is there, your result goes to the teacher. After
-a deploy, wait a few seconds before you complete the task.</p>
-<p>Before you leave, answer for yourself:</p>
+<p>The engine reads what steps 3 to 6 left behind: your latest
+<code>student-request</code>, your three instances and the incident of
+step 6. This check is your lab for today.</p>
+<h3 id="before-you-start">7.1 Before you start</h3>
+<p>Tick what is ready:</p>
 <ul>
-<li>When do you use an exclusive, a parallel and an inclusive
-gateway?</li>
-<li>Why is <code>x = true</code> safe when <code>x</code> is missing,
-but <code>x &gt; 2</code> is not?</li>
+<li><input type="checkbox"> the latest version of
+<code>student-request</code> is the repaired model of 6.4, deployed some
+seconds ago;</li>
+<li><input type="checkbox"> the three instances of 5.2 are completed in
+Operate;</li>
+<li><input type="checkbox"> no instance of <code>student-request</code>
+is stopped at an incident.</li>
+</ul>
+<h3 id="run-the-check">7.2 Run the check</h3>
+<ol type="1">
+<li>In Tasklist, tab <em>Processes</em>:
+<code>S03 · End-of-session check</code> → <em>Start process</em>
+(<em>Iniciar proceso</em>).</li>
+<li>Fill in your RUT (format <code>12.345.678-5</code>, with the right
+check digit), names and e-mail.</li>
+<li>Open the task <code>S03 · Check your work</code> and complete
+it.</li>
+</ol>
+<p>If something is missing, the task comes back with
+<strong>Feedback</strong>. If everything is there, it does not come
+back.</p>
+<h3 id="if-something-is-missing">7.3 If something is missing</h3>
+<p>The feedback names the step of this guide. Fix it, wait a few seconds
+if you deployed, and complete the task again.</p>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 17%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>The feedback is about</th>
+<th>Go to</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no deployed version</td>
+<td>4.3 or 6.4</td>
+<td>deploy <code>thread-s03.bpmn</code>; the process id is
+<code>student-request</code></td>
+</tr>
+<tr>
+<td>exclusive gateways</td>
+<td>3.1 to 3.3</td>
+<td>there are three: <code>Type of request?</code>,
+<code>Approved?</code> and the merge</td>
+</tr>
+<tr>
+<td>default flows</td>
+<td>3.1, 3.2, 6.4</td>
+<td>mark <code>needs review</code> and <code>rejected</code> as
+<strong>default flow</strong></td>
+</tr>
+<tr>
+<td><code>certificateNumber</code>, <code>registered</code> or
+<code>letter</code></td>
+<td>3.1, 3.2</td>
+<td>write the result variable in its script task</td>
+</tr>
+<tr>
+<td>inclusive or parallel gateways</td>
+<td>4.1, 4.3</td>
+<td><code>Who must be informed?</code> and the join before
+<code>Request closed</code> are inclusive; there is no parallel
+gateway</td>
+</tr>
+<tr>
+<td><code>studentMessage</code>, <code>instructorMessage</code> or
+<code>registrarMessage</code></td>
+<td>4.2</td>
+<td>write the result variable in its script task</td>
+</tr>
+<tr>
+<td>an instance that is not completed</td>
+<td>5.2</td>
+<td>start that instance again with the latest version, and finish it in
+Tasklist</td>
+</tr>
+<tr>
+<td>no condition incident</td>
+<td>6.2</td>
+<td>make the incident: the check needs to see it</td>
+</tr>
+<tr>
+<td>an instance still stopped</td>
+<td>6.4</td>
+<td><strong>cancel</strong> it in Operate</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-know-that-you-finished">7.4 How to know that you
+finished</h3>
+<ol type="1">
+<li>In Operate, among the finished instances, the one of
+<code>S03 · End-of-session check</code> is completed and reached
+<code>Check completed</code>: your result is in the teacher’s
+sheet.</li>
+<li>If instead Tasklist shows the task
+<code>S03 · Results not sent: tell the teacher</code>, your result did
+not arrive. Tell the teacher. If your RUT has a mistake, complete that
+task and start the check again with the right one.</li>
+</ol>
+<h3 id="think-about-6">7.5 Think about</h3>
+<ol type="1">
+<li>Which gateway do you use for one branch only, for all the branches,
+and for one or more?</li>
+<li>Which of today’s errors shows when you deploy, which one gives an
+incident, and which one gives no warning at all?</li>
 <li>Describe the smallest model where a parallel join would wait
 forever.</li>
-</ul>
+</ol>
 <h2 id="deliverable">Deliverable</h2>
 <p>Nothing to upload: the check of step 7 is your lab for today. Keep
 <code>thread-s03.bpmn</code>: session 4 starts from it.</p>

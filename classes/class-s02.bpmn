@@ -267,7 +267,7 @@
       </bpmn:startEvent>
       <bpmn:endEvent id="SendResultsEnd" name="Step done">
         <bpmn:incoming>Flow_GwSend_SendResultsEnd</bpmn:incoming>
-        <bpmn:incoming>Flow_Send_SendResultsEnd</bpmn:incoming>
+        <bpmn:incoming>Flow_GwAccepted_SendResultsEnd</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:exclusiveGateway id="GwSend" name="Results sheet set?" default="Flow_GwSend_SendResultsEnd">
         <bpmn:incoming>Flow_SendResultsStart_GwSend</bpmn:incoming>
@@ -275,17 +275,39 @@
         <bpmn:outgoing>Flow_GwSend_SendResultsEnd</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:serviceTask id="Send" name="Send the results to the teacher">
-        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source="=cfg.resultsUrl" target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={token: "p2a-camunda-2026", session: "s02", finishedAt: string(now()), rut: rut, lastName: lastName, firstName: firstName, studentEmail: studentEmail, a1: string join(a1, "+"), a1b: a1b, a2: a2, a3: a3, cpDueDate: cpDueDate, cpSummary: cpSummary, daysHidden: daysHidden, feelCompare: feelCompare, feelJoin: feelJoin, formIdQ: formIdQ, feelUrgent: feelUrgent, self1: self1, self2: self2, rateSelf1: rateSelf1, rateSelf2: rateSelf2}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="POST" target="method" /><zeebe:input source="=cfg.resultsUrl" target="url" /><zeebe:input source='={"Content-Type": "application/json"}' target="headers" /><zeebe:input source='={token: "p2a-camunda-2026", session: "s02", finishedAt: string(now()), rut: rut, lastName: lastName, firstName: firstName, studentEmail: studentEmail, a1: string join(a1, "+"), a1b: a1b, a2: a2, a3: a3, cpDueDate: cpDueDate, cpSummary: cpSummary, daysHidden: daysHidden, feelCompare: feelCompare, feelJoin: feelJoin, formIdQ: formIdQ, feelUrgent: feelUrgent, self1: self1, self2: self2, rateSelf1: rateSelf1, rateSelf2: rateSelf2}' target="body" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value='={sheetUrl: if response.headers.Location != null then response.headers.Location else response.headers.location, sheetOk: response.body.ok = true or contains(string(response.body), "\"ok\":true")}' /><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
         <bpmn:incoming>Flow_GwSend_Send</bpmn:incoming>
-        <bpmn:outgoing>Flow_Send_SendResultsEnd</bpmn:outgoing>
+        <bpmn:outgoing>Flow_Send_GwReply</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:boundaryEvent id="SendFailed" name="Not sent" attachedToRef="Send">
         <bpmn:outgoing>Flow_SendFailed_TellTeacher</bpmn:outgoing>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_SendFailed" errorRef="Error_SEND_FAILED" />
       </bpmn:boundaryEvent>
+      <bpmn:exclusiveGateway id="GwReply" name="Answer elsewhere?" default="Flow_GwReply_GwAccepted">
+        <bpmn:incoming>Flow_Send_GwReply</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwReply_ReadReply</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwReply_GwAccepted</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:serviceTask id="ReadReply" name="Read the sheet's answer">
+        <bpmn:extensionElements><zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" /><zeebe:ioMapping><zeebe:input source="noAuth" target="authentication.type" /><zeebe:input source="GET" target="method" /><zeebe:input source="=sheetUrl" target="url" /><zeebe:input source="20" target="connectionTimeoutInSeconds" /><zeebe:input source="20" target="readTimeoutInSeconds" /></zeebe:ioMapping><zeebe:taskHeaders><zeebe:header key="resultExpression" value='={sheetOk: response.body.ok = true or contains(string(response.body), "\"ok\":true")}' /><zeebe:header key="errorExpression" value='=if error != null then bpmnError("SEND_FAILED", error.message) else null' /><zeebe:header key="retryBackoff" value="PT5S" /></zeebe:taskHeaders></bpmn:extensionElements>
+        <bpmn:incoming>Flow_GwReply_ReadReply</bpmn:incoming>
+        <bpmn:outgoing>Flow_ReadReply_GwAccepted</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:boundaryEvent id="ReplyFailed" name="Not read" attachedToRef="ReadReply">
+        <bpmn:outgoing>Flow_ReplyFailed_TellTeacher</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_ReplyFailed" errorRef="Error_SEND_FAILED" />
+      </bpmn:boundaryEvent>
+      <bpmn:exclusiveGateway id="GwAccepted" name="Accepted?" default="Flow_GwAccepted_TellTeacher">
+        <bpmn:incoming>Flow_GwReply_GwAccepted</bpmn:incoming>
+        <bpmn:incoming>Flow_ReadReply_GwAccepted</bpmn:incoming>
+        <bpmn:outgoing>Flow_GwAccepted_TellTeacher</bpmn:outgoing>
+        <bpmn:outgoing>Flow_GwAccepted_SendResultsEnd</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
       <bpmn:userTask id="TellTeacher" name="S02 · Results not sent: tell the teacher">
         <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="class-s02-not-sent" /></bpmn:extensionElements>
         <bpmn:incoming>Flow_SendFailed_TellTeacher</bpmn:incoming>
+        <bpmn:incoming>Flow_ReplyFailed_TellTeacher</bpmn:incoming>
+        <bpmn:incoming>Flow_GwAccepted_TellTeacher</bpmn:incoming>
         <bpmn:outgoing>Flow_TellTeacher_SendResultsNotSent</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:endEvent id="SendResultsNotSent" name="Teacher told">
@@ -293,11 +315,21 @@
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_SendResultsStart_GwSend" sourceRef="SendResultsStart" targetRef="GwSend" />
       <bpmn:sequenceFlow id="Flow_SendFailed_TellTeacher" sourceRef="SendFailed" targetRef="TellTeacher" />
+      <bpmn:sequenceFlow id="Flow_ReplyFailed_TellTeacher" sourceRef="ReplyFailed" targetRef="TellTeacher" />
+      <bpmn:sequenceFlow id="Flow_Send_GwReply" sourceRef="Send" targetRef="GwReply" />
+      <bpmn:sequenceFlow id="Flow_GwReply_ReadReply" name="yes" sourceRef="GwReply" targetRef="ReadReply">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=sheetUrl != null</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_GwReply_GwAccepted" name="no" sourceRef="GwReply" targetRef="GwAccepted" />
+      <bpmn:sequenceFlow id="Flow_ReadReply_GwAccepted" sourceRef="ReadReply" targetRef="GwAccepted" />
+      <bpmn:sequenceFlow id="Flow_GwAccepted_TellTeacher" name="no" sourceRef="GwAccepted" targetRef="TellTeacher" />
       <bpmn:sequenceFlow id="Flow_GwSend_Send" name="yes" sourceRef="GwSend" targetRef="Send">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cfg.resultsUrl != ""</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_GwSend_SendResultsEnd" name="no" sourceRef="GwSend" targetRef="SendResultsEnd" />
-      <bpmn:sequenceFlow id="Flow_Send_SendResultsEnd" sourceRef="Send" targetRef="SendResultsEnd" />
+      <bpmn:sequenceFlow id="Flow_GwAccepted_SendResultsEnd" name="yes" sourceRef="GwAccepted" targetRef="SendResultsEnd">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=sheetOk = true</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_TellTeacher_SendResultsNotSent" sourceRef="TellTeacher" targetRef="SendResultsNotSent" />
     </bpmn:subProcess>
     <bpmn:endEvent id="End" name="Class completed">
@@ -445,16 +477,26 @@
       <bpmndi:BPMNShape id="SendResultsStart_di" bpmnElement="SendResultsStart"><dc:Bounds x="127" y="127" width="36" height="36" /></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GwSend_di" bpmnElement="GwSend" isMarkerVisible="true"><dc:Bounds x="290" y="120" width="50" height="50" /></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Send_di" bpmnElement="Send"><dc:Bounds x="430" y="105" width="110" height="80" /></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SendResultsEnd_di" bpmnElement="SendResultsEnd"><dc:Bounds x="637" y="257" width="36" height="36" /></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TellTeacher_di" bpmnElement="TellTeacher"><dc:Bounds x="600" y="365" width="110" height="80" /></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="SendResultsNotSent_di" bpmnElement="SendResultsNotSent"><dc:Bounds x="807" y="387" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendResultsEnd_di" bpmnElement="SendResultsEnd"><dc:Bounds x="1147" y="257" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwReply_di" bpmnElement="GwReply" isMarkerVisible="true"><dc:Bounds x="630" y="120" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TellTeacher_di" bpmnElement="TellTeacher"><dc:Bounds x="1110" y="365" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReadReply_di" bpmnElement="ReadReply"><dc:Bounds x="770" y="105" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwAccepted_di" bpmnElement="GwAccepted" isMarkerVisible="true"><dc:Bounds x="970" y="510" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendResultsNotSent_di" bpmnElement="SendResultsNotSent"><dc:Bounds x="1317" y="387" width="36" height="36" /></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SendFailed_di" bpmnElement="SendFailed"><dc:Bounds x="496" y="167" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="534" y="199" width="70" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReplyFailed_di" bpmnElement="ReplyFailed"><dc:Bounds x="836" y="167" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="874" y="199" width="70" height="27" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_SendResultsStart_GwSend_di" bpmnElement="Flow_SendResultsStart_GwSend"><di:waypoint x="163" y="145" /><di:waypoint x="290" y="145" /></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_SendFailed_TellTeacher_di" bpmnElement="Flow_SendFailed_TellTeacher"><di:waypoint x="514" y="203" /><di:waypoint x="514" y="405" /><di:waypoint x="600" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_SendFailed_TellTeacher_di" bpmnElement="Flow_SendFailed_TellTeacher"><di:waypoint x="514" y="203" /><di:waypoint x="514" y="405" /><di:waypoint x="1110" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReplyFailed_TellTeacher_di" bpmnElement="Flow_ReplyFailed_TellTeacher"><di:waypoint x="854" y="203" /><di:waypoint x="854" y="405" /><di:waypoint x="1110" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Send_GwReply_di" bpmnElement="Flow_Send_GwReply"><di:waypoint x="540" y="145" /><di:waypoint x="630" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwReply_ReadReply_di" bpmnElement="Flow_GwReply_ReadReply"><di:waypoint x="680" y="145" /><di:waypoint x="770" y="145" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwReply_GwAccepted_di" bpmnElement="Flow_GwReply_GwAccepted"><di:waypoint x="655" y="170" /><di:waypoint x="655" y="535" /><di:waypoint x="970" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ReadReply_GwAccepted_di" bpmnElement="Flow_ReadReply_GwAccepted"><di:waypoint x="880" y="145" /><di:waypoint x="995" y="145" /><di:waypoint x="995" y="510" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwAccepted_TellTeacher_di" bpmnElement="Flow_GwAccepted_TellTeacher"><di:waypoint x="995" y="510" /><di:waypoint x="995" y="405" /><di:waypoint x="1110" y="405" /></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_GwSend_Send_di" bpmnElement="Flow_GwSend_Send"><di:waypoint x="340" y="145" /><di:waypoint x="430" y="145" /></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_GwSend_SendResultsEnd_di" bpmnElement="Flow_GwSend_SendResultsEnd"><di:waypoint x="315" y="170" /><di:waypoint x="315" y="275" /><di:waypoint x="637" y="275" /></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_Send_SendResultsEnd_di" bpmnElement="Flow_Send_SendResultsEnd"><di:waypoint x="540" y="145" /><di:waypoint x="588" y="145" /><di:waypoint x="588" y="275" /><di:waypoint x="637" y="275" /></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_TellTeacher_SendResultsNotSent_di" bpmnElement="Flow_TellTeacher_SendResultsNotSent"><di:waypoint x="710" y="405" /><di:waypoint x="807" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwSend_SendResultsEnd_di" bpmnElement="Flow_GwSend_SendResultsEnd"><di:waypoint x="315" y="170" /><di:waypoint x="315" y="275" /><di:waypoint x="1147" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwAccepted_SendResultsEnd_di" bpmnElement="Flow_GwAccepted_SendResultsEnd"><di:waypoint x="995" y="510" /><di:waypoint x="995" y="275" /><di:waypoint x="1147" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_TellTeacher_SendResultsNotSent_di" bpmnElement="Flow_TellTeacher_SendResultsNotSent"><di:waypoint x="1220" y="405" /><di:waypoint x="1317" y="405" /></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

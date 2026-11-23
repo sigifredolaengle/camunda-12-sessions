@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "text",
-      "text": "## S03 · End-of-session check\nStart this check when you have finished steps 3 to 6 of the guide. The engine reads your latest `student-request`, your three instances and the incident of step 6.\n\n- If something is missing, the task comes back with **Feedback**: fix it and complete the task again.\n- When everything is there, your result goes to the teacher.\n\nFill in your data to start.\n\nYour answers go to the teacher at the end.",
+      "text": "## S03 · End-of-session check\nStart this check when you have finished steps 3 to 6 of the guide. The engine reads your latest `student-request`, your three instances and the incident of step 6.\n\n- If something is missing, the task comes back with **Feedback**: fix it and complete the task again.\n- When everything is there, the task does not come back.\n\nFill in your data to start.\n\nYour result goes to the teacher at the end: write your RUT with care.",
       "id": "class_s03_start_0"
     },
     {
@@ -10,7 +10,9 @@
       "key": "rut",
       "label": "RUT",
       "validate": {
-        "required": true
+        "required": true,
+        "validationType": "custom",
+        "pattern": "^[0-9]{1,2}\\.?[0-9]{3}\\.?[0-9]{3}-?[0-9kK]$"
       },
       "description": "Format 12.345.678-5",
       "id": "class_s03_start_1"

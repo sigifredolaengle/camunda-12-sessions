@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "text",
-      "text": "## Your results were not sent\nThe engine could not reach the teacher's sheet (no internet?). Your work is done: tell the teacher, who can read your answers in Operate.",
+      "text": "## Your results were not sent\nThe engine could not reach the teacher's sheet (no internet?), or the sheet did not accept the results (a mistake in your RUT?). Your work is done: tell the teacher, who can see your check in Operate. If your RUT has a mistake, complete this task and start the check again with the right one.",
       "id": "class_s03_not_sent_0"
     },
     {
