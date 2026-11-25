@@ -30,22 +30,6 @@ if %INTENTOS% geq 60 (
 goto esperar
 
 :abrir
-rem Clases guiadas: la version publicada en el sitio del curso si hay internet; si no,
-rem la ultima copia descargada en C:\camunda\clases. Volver a desplegar un archivo
-rem identico no crea una version nueva, asi que se puede repetir en cada inicio.
-set "SITIO=https://sigifredolaengle.github.io/camunda-12-sessions"
-set "CLASES=C:\camunda\clases"
-if not exist "%CLASES%" mkdir "%CLASES%"
-echo Actualizando las clases guiadas ...
-curl.exe -s -f -o "%TEMP%\clases.txt" "%SITIO%/classes/manifest.txt"
-if not errorlevel 1 (
-  for /f "usebackq delims=" %%F in ("%TEMP%\clases.txt") do curl.exe -s -f -o "%CLASES%\%%F" "%SITIO%/classes/%%F"
-) else (
-  echo   Sin conexion con el sitio del curso: se usan las clases ya descargadas.
-)
-for %%F in ("%CLASES%\*.form" "%CLASES%\*.bpmn") do (
-  curl.exe -s -o nul -X POST http://localhost:8080/v2/deployments -F "resources=@%%F"
-)
 echo.
 echo Camunda esta listo. Usuario y clave de Operate y Tasklist: demo / demo
 start "" "http://localhost:8080/operate"

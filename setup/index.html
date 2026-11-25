@@ -274,11 +274,10 @@ disk space available».</li>
 <code>netstat -ano | findstr :8080</code> no debe mostrar nada.</li>
 <li>Permisos de administrador para instalar.</li>
 <li>Acceso a <code>https://sigifredolaengle.github.io</code> (el sitio
-del curso). <em>Iniciar Camunda</em> descarga de ahí las clases guiadas
-cada vez que arranca; si un proxy o filtro de la red lo bloquea, las
-clases no se actualizan.</li>
-<li>Que se pueda escribir en <code>C:\camunda</code> durante la sesión,
-también en <code>C:\camunda\clases</code>.</li>
+del curso). Se utiliza para consultar las guías; el inicio de Camunda no
+descarga ni despliega correctores.</li>
+<li>Que se pueda escribir en <code>C:\camunda</code> durante la
+sesión.</li>
 </ul>
 <p><strong>Preguntas para el técnico</strong> (por favor, responder al
 profesor antes de instalar):</p>
@@ -322,8 +321,7 @@ instalador.</li>
 <tbody>
 <tr>
 <td><a href="files/iniciar-camunda.bat" download><code>iniciar-camunda.bat</code></a></td>
-<td>Inicia Camunda, despliega las clases guiadas y abre Operate y
-Tasklist (paso 5)</td>
+<td>Inicia Camunda y abre Operate y Tasklist (paso 5)</td>
 </tr>
 <tr>
 <td><a href="files/detener-camunda.bat" download><code>detener-camunda.bat</code></a></td>
@@ -436,16 +434,13 @@ otros cursos. Se inicia con un doble clic al empezar la clase.</p>
 </ul></li>
 </ol>
 <p><code>iniciar-camunda.bat</code> arranca Camunda, espera a que esté
-listo (uno a tres minutos), despliega las clases guiadas y abre dos
-pestañas del navegador.</p>
-<p><strong>Clases guiadas.</strong> Cada sesión del curso es también un
-proceso que el alumno sigue en Tasklist. Al arrancar, el
-<code>.bat</code> descarga la versión publicada de todas las clases
-desde el sitio del curso a <code>C:\camunda\clases</code> y las
-despliega en Camunda. Sin conexión con el sitio, despliega las que ya
-había descargado. Volver a desplegar un archivo idéntico no crea una
-versión nueva, así que esto se repite sin problema en cada inicio,
-también con Deep Freeze.</p>
+listo (uno a tres minutos) y abre dos pestañas del navegador.</p>
+<p><strong>Inicio simplificado.</strong> El alumno inicia el servidor,
+abre Desktop Modeler y consulta la guía. El acceso directo no descarga
+ni despliega procesos de verificación, tampoco desde copias antiguas en
+caché. Las clases 1 y 3 no tienen evaluación ni registro por sesión. Los
+modelos y formularios del ejercicio se despliegan desde el Modeler
+cuando lo indica la guía.</p>
 <p>Las pestañas:</p>
 <ul>
 <li>Operate en <code>http://localhost:8080/operate</code></li>
@@ -493,13 +488,6 @@ Camunda ya estaba corriendo, solo abre las pestañas. Usuario y clave:
 <td><code>curl.exe -i http://localhost:8080/v2/topology</code> en
 PowerShell</td>
 <td><code>HTTP/1.1 200</code> y el estado del clúster</td>
-</tr>
-<tr>
-<td>Clases guiadas</td>
-<td>En Tasklist, pestaña <em>Procesos</em></td>
-<td>aparecen <em>S01 · From drawing to running</em>, <em>S02 ·
-Variables, FEEL and forms</em> y <em>S03 · End-of-session
-check</em></td>
 </tr>
 </tbody>
 </table>
@@ -559,14 +547,6 @@ cambiarlo en todo el curso</td>
 <td>El Modeler no muestra <em>Token Simulation</em></td>
 <td>Plugin en la carpeta equivocada o con dos niveles</td>
 <td>Revisar la ruta del paso 4 y reiniciar el Modeler</td>
-</tr>
-<tr>
-<td>Tasklist no muestra las clases guiadas</td>
-<td>La sala no llega al sitio del curso</td>
-<td>En PowerShell:
-<code>curl.exe -I https://sigifredolaengle.github.io/camunda-12-sessions/classes/manifest.txt</code>
-debe decir <code>200</code>. Si no, pedir que se permita
-<code>sigifredolaengle.github.io</code></td>
 </tr>
 <tr>
 <td>El despliegue falla con «Attribute ‘type’ must be present»</td>

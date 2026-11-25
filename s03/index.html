@@ -236,14 +236,6 @@ in order.</p>
 </thead>
 <tbody>
 <tr>
-<td>The end-of-session check, for your own computer</td>
-<td><a href="https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip" class="uri">https://sigifredolaengle.github.io/camunda-12-sessions/s03/class-s03.zip</a></td>
-<td>Only on your own computer, before anything else: unzip it and
-double-click <code>desplegar-clase.bat</code> (macOS:
-<code>desplegar-clase.command</code>). In the lab, <em>Iniciar
-Camunda</em> has already deployed it.</td>
-</tr>
-<tr>
 <td>Tasklist</td>
 <td><a href="http://127.0.0.1:8080/tasklist" class="uri">http://127.0.0.1:8080/tasklist</a></td>
 <td>Complete the tasks of your instances. User and password:
@@ -265,12 +257,6 @@ password: <code>demo</code> / <code>demo</code>.</td>
 <td><a href="files/thread-s02.bpmn" download><code>thread-s02.bpmn</code></a>, <a href="files/request-intake.form" download><code>request-intake.form</code></a>, <a href="files/review-request-s02.form" download><code>review-request-s02.form</code></a></td>
 <td>Download the three. Deploy the two forms first, then the model.</td>
 </tr>
-<tr>
-<td>Tasklist, tab <em>Processes</em></td>
-<td><a href="http://127.0.0.1:8080/tasklist/processes" class="uri">http://127.0.0.1:8080/tasklist/processes</a></td>
-<td>At the end (step 7): start
-<code>S03 · End-of-session check</code>.</td>
-</tr>
 </tbody>
 </table>
 <h2 id="how-to-work-today">How to work today</h2>
@@ -279,8 +265,9 @@ password: <code>demo</code> / <code>demo</code>.</td>
 questions. You do not deploy <code>Hardware retailer</code>.</li>
 <li>Steps 3 to 6 are yours: work with this guide and the Modeler side by
 side, and keep Operate and Tasklist open in two tabs.</li>
-<li>Step 7: the engine checks your work and sends the result to the
-teacher.</li>
+<li>Finish by discussing the questions and comparing your instances with
+the expected paths. There is no verification process or per-class
+submission.</li>
 </ul>
 <p><strong>Before you start an instance: check the data.</strong> Every
 time you deploy and start instances, look at the model and follow the
@@ -2075,80 +2062,22 @@ instance 3 in 5.1), and complete <code>Review request</code> with
 to <code>&quot;approved&quot;</code> and then pressed <em>Retry</em>? Is it a
 repair?</li>
 </ol>
-<h2 id="step-7-final-check-and-delivery-receipt">Step 7: final check and
-delivery receipt</h2>
-<h3 id="before-you-start">7.1 Before you start</h3>
-<p>Keep the repaired session-3 model, four completed cases, and the
-cancelled broken instance with its resolved condition incident. The
-completed cases are: certificate; postponement approved; recognition
-rejected; and <strong>recognition approved from step 4.3</strong>. No
-active incident of any type may remain in the running case.</p>
-<h3 id="run-the-check">7.2 Run the check</h3>
-<p>Start <code>S03 · End-of-session check</code> in Tasklist →
-<em>Processes</em>. Enter your RUT, names and e-mail. Complete
-<code>S03 · Check your work</code>. In <em>Version to assess</em>, leave
-the optional field blank only if the latest version belongs to session
-3; otherwise enter the repaired session-3 version number from
-Operate.</p>
-<p>The check reads the selected deployed XML, actual executed tasks,
-typed variable values, instance keys and incident evidence. It allows
-the earlier correct executions of 4.3 and step 5; it does not require
-rerunning all of them on the latest version. The task ids must still
-correspond to the same tasks in the repaired model. If tasks were
-deleted and recreated with different ids, replay the cases using that
-model.</p>
-<h3 id="if-something-is-missing">7.3 If something is missing</h3>
-<p>Feedback returns to the check task. Correct the named step and
-complete it again. The receiver also checks the model connections,
-outgoing conditions, default flows and inclusive join. Existence of a
-variable alone is insufficient: <code>registered</code> must be
-<code>true</code>, and the certificate, rejection letter and
-notifications must contain the expected values and have been produced by
-the expected executed tasks.</p>
-<p>The incident must be <code>CONDITION_ERROR</code> at
-<code>Approved?</code> for a rejected request, then resolved by
-cancelling the broken instance; changing the decision to approve it is
-not accepted as the repair.</p>
-<h3 id="confirm-delivery">7.4 Confirm delivery</h3>
-<p>A passed local check is not a receipt.
-<code>S03 · Delivery receipt</code> shows the receipt id, approval,
-server reception time and timing status. Keep the receipt and complete
-the task. A generic completed check instance alone does not establish
-reception.</p>
-<p>If <code>S03 · Delivery pending</code> appears, restore internet or
-correct your RUT and retry the same submission. Repeating a transport
-request does not add another row. Choose <em>Check my work again</em>
-after changing the evidence. If the service remains unavailable, tell
-the teacher and keep the check instance key; the delivery remains
-pending.</p>
-<h3 id="finish-independently-after-class">7.5 Finish independently after
-class</h3>
-<p>You may finish independently using this guide and automatic feedback.
-<strong>The School administration determines the exam date.</strong> The
-common deadline is <strong>23:59, America/Santiago, on that
-day</strong>. Later submissions remain accepted and are marked
-<em>Late</em>, independently of approval. Until the date is configured,
-timing is <em>Deadline not configured</em>. The first approved server
-reception determines punctuality; a later attempt does not make an
-on-time approval late.</p>
-<p>On another or reset computer, the BPMN file alone is insufficient.
-Redeploy the forms and model, replay the approved recognition of 4.3 and
-the three cases of step 5, then repeat the break-and-repair exercise in
-step 6. Keep the cancelled broken instance and its variables. Finally
-select the repaired version and run the check. Never erase your only
-copy of an earlier model to deliver an old session.</p>
-<h3 id="think-about-6">7.6 Think about</h3>
-<ol type="1">
-<li>Which gateway selects one branch, all branches, or one or more?</li>
-<li>Which error prevents deployment, which creates an incident, and
-which can leave a null result without warning?</li>
-<li>Why is a non-empty variable insufficient evidence that the correct
-task ran?</li>
-<li>How do you distinguish passed work from confirmed delivery?</li>
-</ol>
-<h2 id="deliverable">Deliverable</h2>
-<p>Nothing to upload: the check of step 7 is your lab for today. Keep
-<code>thread-s03.bpmn</code>: session 4 starts from it.</p>
+<h2 id="closing-discussion">Closing discussion</h2>
+<p>Use the guide and Operate to compare the paths you predicted with
+those that ran. Explain which branches started, what the inclusive join
+waited for, and why the repaired model completes a rejected request.
+Keep the deploy error, the runtime incident and a wrong result without
+an incident distinct.</p>
+<p>There is no verification model to deploy, per-class assessment,
+result registration or submission. The teacher follows the same student
+guide on screen and checks understanding through short demonstrations
+and oral questions. You may repeat the exercises independently at
+home.</p>
+<h2 id="keep-for-the-next-session">Keep for the next session</h2>
+<p>Save <code>thread-s03.bpmn</code> and its forms for session 4.
+Nothing is uploaded or registered for this class. If engine data were
+erased, redeploy the forms and model and recreate the instances when
+practising again.</p>
 <script>
 var ES = document.documentElement.lang === "es";
 var L = ES ? ["Copiar", "Copiado"] : ["Copy", "Copied"];
