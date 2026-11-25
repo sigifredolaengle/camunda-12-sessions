@@ -1233,9 +1233,9 @@ are not required.</li>
 the merge.</li>
 </ol>
 <pre class="json"><code>{&quot;studentName&quot;: &quot;Ana Rojas&quot;, &quot;studentId&quot;: &quot;19.876.543-0&quot;, &quot;studentEmail&quot;: &quot;ana@example.org&quot;, &quot;requestType&quot;: &quot;certificate&quot;, &quot;course&quot;: &quot;BPM&quot;}</code></pre>
-<p>In Operate, look at the path and the variables. The instances of 3.1
-to 3.3, and later the one of 4.3, are only a first test: the instances
-of step 5 are the ones that count for the check.</p>
+<p>In Operate, look at the path and the variables. These runs let you
+inspect each addition to the model; in step 5 you compare three complete
+paths with notifications.</p>
 <h3 id="think-about-2">3.4 Think about</h3>
 <ol type="1">
 <li>Why does the arrow <code>needs review</code> deploy without a
@@ -1592,9 +1592,9 @@ gateway?</li>
 <code>Notify instructor</code>? Should it be so?</li>
 </ol>
 <h2 id="step-5-run-three-instances">Step 5: run three instances</h2>
-<p>The three instances of this step are the ones that count for the
-check of step 7. Start them with the version that you deployed in 4.3:
-those of steps 3.1 to 3.3 have no <code>studentMessage</code>.</p>
+<p>Run three instances to compare the paths and notifications. Start
+them with the version deployed in 4.3: the earlier versions of steps 3.1
+to 3.3 do not yet produce <code>studentMessage</code>.</p>
 <h3 id="check-the-data">5.1 Check the data</h3>
 <p>Before you start, check the data of the three instances in the model.
 Follow the path of each one:</p>
