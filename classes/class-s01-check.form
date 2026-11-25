@@ -1,0 +1,39 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## S01 · Check your work\n*Guide: steps 1 to 5.*",
+      "id": "class_s01_check_0"
+    },
+    {
+      "type": "text",
+      "text": "### ⚠ Feedback from the engine\n{{fbCheck}}",
+      "conditional": {
+        "hide": "=fbCheck = null or fbCheck = \"\""
+      },
+      "id": "class_s01_check_1"
+    },
+    {
+      "type": "text",
+      "text": "### Done when\nSelect the session-1 version; keep two deployed versions, one completed instance and another waiting at `Review request`; delete `student-request-test`.",
+      "id": "class_s01_check_2"
+    },
+    {
+      "type": "textfield",
+      "key": "assessedVersion",
+      "label": "Version to assess (optional)",
+      "description": "Operate → process version number, for example 2. Leave blank only if the latest version belongs to this session.",
+      "id": "class_s01_check_3"
+    },
+    {
+      "type": "text",
+      "text": "Complete this task to check. Wait a few seconds after deploying. If earlier evidence has been deleted, replay the instances from the guide. A passed local check is not a delivery receipt.",
+      "id": "class_s01_check_4"
+    }
+  ],
+  "type": "default",
+  "id": "class-s01-check",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

@@ -1,0 +1,14 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Result received\n**Receipt:** {{receipt.receiptId}}\n\n**Result:** {{receipt.academicStatus}}\n\n**Timing:** {{receipt.timingStatus}}\n\n**Server received at:** {{receipt.receivedAt}}\n\n**Exam date:** {{receipt.examDate}}\n\nThe School administration sets the exam date. If it has not been configured yet, timing is pending. A later retry does not replace your first approved reception. Keep this receipt. Complete the task to close this check.",
+      "id": "class_s03_receipt_0"
+    }
+  ],
+  "type": "default",
+  "id": "class-s03-receipt",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

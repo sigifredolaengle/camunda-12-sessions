@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>S01 student guide: From drawing to running</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style>
+:root { --fg:#1f2328; --muted:#59636e; --bg:#ffffff; --code:#f3f4f6; --line:#d1d9e0;
+--type:#fff4e5; --type-line:#e8890c; --accent:#0b62d6; }
+@media (prefers-color-scheme: dark) {
+:root { --fg:#e6e8eb; --muted:#9aa4ae; --bg:#16181c; --code:#23272e; --line:#3a414b;
+--type:#33270f; --type-line:#f0a030; --accent:#6aa8ff; } }
+html { background: var(--bg); }
+body { color: var(--fg); background: var(--bg); max-width: 52rem; margin: 0 auto;
+padding: 2rem 1rem 4rem; font: 16px/1.6 -apple-system, "Segoe UI", Roboto,
+Helvetica, Arial, sans-serif; }
+* { hyphens: manual !important; -webkit-hyphens: manual !important; }
+h1 { font-size: 1.8rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; padding-top: .8rem;
+border-top: 1px solid var(--line); }
+a { color: var(--accent); }
+p > em:only-child { color: var(--muted); }
+code { font: .92em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+background: var(--code); padding: .1em .35em; border-radius: 4px; }
+pre { position: relative; background: var(--code); border: 1px solid var(--line);
+border-radius: 8px; padding: .8rem 5.5rem .8rem 1rem; overflow-x: auto;
+white-space: pre-wrap; word-break: break-word; }
+pre code { background: none; padding: 0; }
+button.copy { position: absolute; top: .45rem; right: .45rem; font: 600 .8rem/1 inherit;
+font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+padding: .4rem .7rem; border-radius: 6px; border: 1px solid var(--line);
+background: var(--bg); color: var(--fg); cursor: pointer; }
+button.copy:hover { border-color: var(--accent); color: var(--accent); }
+button.copy.done { border-color: #1a7f37; color: #1a7f37; }
+div.type { background: var(--type); border-left: 5px solid var(--type-line);
+border-radius: 8px; padding: .6rem 1rem .2rem; margin: 1rem 0; }
+div.type::before { content: "⌨ Type it yourself — do not copy"; display: block;
+font-weight: 700; font-size: .9rem; color: var(--type-line);
+margin-bottom: .3rem; }
+div.type pre { background: var(--bg); padding-right: 1rem; }
+table { border-collapse: collapse; margin: 1rem 0; width: 100%; font-size: .95rem; }
+th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left;
+vertical-align: top; }
+th { background: var(--code); }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px;
+background: #fff; }
+figure { margin: 1.2rem 0; }
+figcaption { display: none; }
+</style>
+</head>
+<body>
+<h1 id="s01-student-guide-from-drawing-to-running">S01 student guide:
+From drawing to running</h1>
+<h2 id="goal">Goal</h2>
+<p>Deploy a process, follow an instance in Operate, complete its work in
+Tasklist, and distinguish a process id from its name and versions.</p>
+<h2 id="before-class">Before class</h2>
+<p>The four installation checks in 0 setup must pass. In the lab,
+double-click <em>Iniciar Camunda</em>. Open the following in order:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Open</th>
+<th>Link</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final check, on your own computer</td>
+<td><a href="https://sigifredolaengle.github.io/camunda-12-sessions/s01/class-s01.zip" class="uri">https://sigifredolaengle.github.io/camunda-12-sessions/s01/class-s01.zip</a></td>
+<td>Unzip and double-click <code>desplegar-clase.bat</code> (macOS:
+<code>desplegar-clase.command</code>). In the lab, <em>Iniciar
+Camunda</em> deploys it.</td>
+</tr>
+<tr>
+<td>Tasklist</td>
+<td><a href="http://127.0.0.1:8080/tasklist" class="uri">http://127.0.0.1:8080/tasklist</a></td>
+<td>Complete human work. User and password: <code>demo</code> /
+<code>demo</code>.</td>
+</tr>
+<tr>
+<td>Operate</td>
+<td><a href="http://localhost:8080/operate" class="uri">http://localhost:8080/operate</a></td>
+<td>Inspect process versions, instances and tokens. User and password:
+<code>demo</code> / <code>demo</code>.</td>
+</tr>
+<tr>
+<td>Desktop Modeler</td>
+<td>desktop application</td>
+<td>Build and deploy the model.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-work-today">How to work today</h2>
+<ul>
+<li>Step 1 is on the projector. Watch, predict and answer the questions;
+you do not deploy the worked example.</li>
+<li>Steps 2 to 5 are yours. Keep this guide beside the Modeler, Operate
+and Tasklist.</li>
+<li>Step 6 is one final check in Tasklist. There is no class process to
+follow step by step.</li>
+<li>The checkpoint questions are for discussion and independent study.
+They do not block progress in Tasklist.</li>
+</ul>
+<p><strong>Before starting an instance: check the data.</strong> Today’s
+running case reads no process variables: its only task waits for a
+person. The worked example does read data; check that table before
+predicting a path. The table checkboxes are reminders, not submissions;
+reloading clears them.</p>
+<h2 id="step-1-the-worked-example-from-a-drawing-to-a-running-process">Step
+1: the worked example — from a drawing to a running process</h2>
+<p>On the projector. The teacher opens the original OMG
+<code>Incident management</code> model, tries to deploy it, and then
+deploys the adapted version.</p>
+<h3 id="why-the-original-does-not-run">1.1 Why the original does not
+run</h3>
+<p>Look for the executable process setting, the start event, the task
+types and the gateway conditions. Read each deploy error with the
+teacher. An abstract task has no human work attached to it; a user task
+waits in Tasklist.</p>
+<h3 id="predict-then-follow-two-instances">1.2 Predict, then follow two
+instances</h3>
+<p>The teacher starts two instances. These are the variables read by the
+example:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Variable</th>
+<th>Type</th>
+<th>Read in</th>
+<th>Comes from</th>
+<th>Checked?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>canHandle</code></td>
+<td>boolean</td>
+<td>condition after <code>Handle question</code></td>
+<td>entered by the teacher; absent in the first instance</td>
+<td><input type="checkbox"></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>finished</code></td>
+<td>boolean</td>
+<td>condition after first-level support</td>
+<td>entered by the teacher if that path needs it</td>
+<td><input type="checkbox"></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>unsure</code></td>
+<td>boolean</td>
+<td>condition after second-level support</td>
+<td>entered by the teacher if that path needs it</td>
+<td><input type="checkbox"></td>
+</tr>
+</tbody>
+</table>
+<p>In the first instance, <code>canHandle</code> is absent: predict
+which outgoing flow is taken. In the second, the teacher sets
+<code>canHandle</code> to <code>true</code>. Follow the tokens in
+Operate and the work in Tasklist.</p>
+<h3 id="think-about">1.3 Think about</h3>
+<ol type="1">
+<li>Which changes were needed before the model could be deployed?</li>
+<li>What does <code>Can handle myself?</code> read: its question label
+or a variable?</li>
+<li>Who decides the value, and who follows the matching flow?</li>
+<li>Does drawing a lane assign a user to its tasks?</li>
+</ol>
+<h2 id="step-2-model-deploy-and-complete-one-instance">Step 2: model,
+deploy and complete one instance</h2>
+<p><strong>The problem.</strong> A student sends a request. A person
+reviews it and closes it. Later sessions will add request types, data,
+decisions and notifications; today the model has only these three
+elements.</p>
+<h3 id="build-the-model">2.1 Build the model</h3>
+<ol type="1">
+<li>In Desktop Modeler: <em>File → New file → BPMN diagram (Camunda
+8)</em>.</li>
+<li>Select the blank canvas. Set process <strong>ID</strong>
+<code>student-request</code> and <strong>Name</strong>
+<code>Student request</code>.</li>
+<li>Draw <code>Request received</code> → <code>Review request</code> →
+<code>Request closed</code>.</li>
+<li>Change <code>Review request</code> to <strong>User task</strong>
+with the wrench menu.</li>
+<li>Save as <code>thread-s01.bpmn</code>.</li>
+</ol>
+<p><img role="img" aria-label="thread-s01" src="data:image/png;base64,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tm3b7r333n369Lnyyitnz56d/eoD+fhv1E+GKbZDMch8fSkNZcM2ju0GGcR+3I6xqMmTJ9d/zoI0P/nJT4LXXnHFFTWus2PHjt///vcdO3as7b9Ynz59XnnllbRXjRo1Kljh9NNPr7Mmw4cPD9afOHFi6sGpU6cGD956660xVu83v/lNsMK1115bY8kLFiwIl7No0aIaV3v22WeDdf77v/87WW8LFy4MXjh58uRkMnnbbbeVlv7vTwijR4+OpbFp5syZc8ABB9T48nbt2o0fPz6ZTO69996pR0aOHBl+7Z/+9Kdg5bvuuivDu9x7773BmlOnTq1xnaY356WXXtp3330zT3uxfPny8EuuueaaDOsPGzYs2QRBOU0pBIpS2r6WjTJjL7842EqFzpkFAAUmuONaosDt3LkzWO7UqVP1Fb766quzzz77V7/61ZdffllbIa+++mq/fv3uu+++8IM//vGPg+Vnnnlmy5YtGaqxdevWp556KqjG6aefXs/6N7p6p5xySrA8a9asGl+Y9nhtN4x4/vnnayy2oX73u99dccUVVVVVsTc27H/+539OPPHEpUuX1vjstm3bLrnkkt///veJ7Gt6c55++ukBAwZ89NFHGd7lqaeeGjBgwIoVK+KoMhCbovk3CtkmLAAoVIXe1/nggw+C5Z49e1Zf4Zxzzpk0aVJquWvXrrfffvvSpUu3b9++YsWKadOmBaP6ysrKUaNGBWumznE48MADU8vbtm17+umnM1TjySefDNKE4cOHt2vXrp71b3T1jjzyyG7duqWWFyxYsG3btjrDghdeeKHGOgRnyx922GH77LNPolFefPHFq666KkuNDSxZsuSMM86orKxM/XnKKafMnDlz06ZN69atmzt37kUXXdSmTZtEInHVVVetXbs2kWVNbM7q1avPOeecHTt2JBKJjh073nLLLe+9915FRcXWrVuXLVv2wAMPfOtb30qt+f77748YMSLbzQFa5r9RyLrmPrWhqNiqTWHrQW1iP5jnw2UIy5YtKysrS72wtLR05cqVaSvcc889Qcl9+vRZt25d5rPNu3TpsmXLluCpm266KXjq7LPPzlCTYcOGBWvOnj07eDzzZQhNrN4FF1wQPDVjxoy0F+7cubO8vDz8+e6+++47d+5MW23jxo3BNrzmmmuSDRG+DKF169apTvOIESNmzpy5fv36eBub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DAAAKO7IQJ+fgLCgIAX7cIYjiJujAABAcff5Y38vCAgLClt4r47xIOJgAQAAeUKfn2YhLCgeaXt7g44jjhQAAJD/9PnJGWFB0XIsAACA4qbPT/aUZrFsAAAAoAAJCwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAARwgIAAAAgQlgAAAAARAgLAAAAgAhhAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAB1hQVPPPFESb21b9++e/fuffv2vfzyy6dPn15VVVW9QMg3Tz31VPAdHjduXKKQlZeXpxpy4YUXNnddAIDiZ7BAgyxatCj4PowZM6a5q9P8ygun997UMwu2bdu2cuXKuXPn/uEPfzj55JMPOeSQ6dOnx1Q3AACggBksQOGK+TKEd999d8iQIXfccUe8xVKbK6+8MgjqFi9e3NzVAQCAWhks5JjBAvk1Z0EymbzssstmzpwZe8kAAEBBM1iAIgkLjj/++GRGGzdufPvtt++4445vfvObwauSyeQVV1yR/cpDI5166qnBd/jKK69s7uoAABQkgwUoYk09s6C8vPyggw669NJLFy5cOHjw4ODxhQsXLlmypMnVAwAACpXBAhSu2C5DaNeu3YMPPtiqVavgkTlz5sRVOAAAULgMFqBFz1nQrVu3E044Ifjz448/zrDy2rVrx48fP3To0AMOOKB9+/a77rrrIYcccuGFF86YMaOeb7d169YHHnhgyJAhPXr0aNu2bXl5+be//e0bbrjh008/TeRcE5tTWVn58MMPn3POOQceeGCnTp3atm2799579+nT58orr5w9e3aiOSxYsOCss87q2rVraWlpbfc4afqHmEgkZs6cefHFF/fu3XuPPfZo27bt1772tX79+l199dX1DJtjqUP2NL16GzZsGD9+/EknndSjR49ddtllr732OuaYY66//vply5Zlue4AAHEyWCiOwUITe+8Z/OMf/7j22muPOeaY7t27p0o+6qij/vVf/7WebYxlK+m9R1S/smjy5Mn1vwwpzU9+8pPgtVdccUWN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sxWQ/wwWimCw0MTeewbhz6s+JYdjlLQxeaO3kt57ji5D6NGjx1VXXRX8uWjRovCz4awo7VZzdRo7dmz1gLDOEKiysrIpn33Ktm3banw8luakFXjJJZfMmDFj48aN06ZNu+aaa4455pjS0sinM3fu3IsuuijRfGJpdTjwq23zZrsO9XH++efXeCXCI488klo46KCDjj322GxUL1xI+Ohcm/qsA/UkL4BCYW+l4BgsFOhgoYm993r+wB4+U6A24UF+jWciNGIr6b3nbs6C8KSjq1atCj8VPmVlzZo1jSs//DHUGZuFrz9ptLVr19b4eCzNqVH79u2HDBlyyy23zJ8/f82aNffee+9hhx0WPDt58uSlS5cmmkksrQ4Xsm7dumapQ3307t37yCOPTC0/8cQTqWl4Pvnkk3nz5tU4tWGM1QsXEr4CqkZfffXVypUrG/dGEAj/LGkEAvkvvJ86rYACYrBQiIOFJvbeM9h9992D5RUrVtS5/nvvvRcs77vvvrFsJb333IUFPXr0CJa3b98ePi3n4IMPDpbDN6JskG984xvB8ltvvZV55Ua/S9iyZctqfDyW5tSpc+fOF1544auvvho+sL700kuJZhJLq8OTl7z99tvNUoeGTnO4bt261DwFjz76aKpPVlZWdt5552Wpeoceemiw/Prrr2de+d133w1uzQBNYbwBhcieS2ExWCjEwUITe+/1vCFFnZ3e1J0LGnT3hPpsJb333IUFaZeOhK8qOeKII4IzWObPn1/nTSwuvvjiYM7JIGcKn/Udvoy8RhlusBm+hCnz2Ufhb2RYLM255JJLUo+0bds2wzemTZs24VO2assvcyCWVh933HHBCnXeBPXEE09MvTyYbjCWOtTTj370o2CO3NSVCME1CCeffHJQpbBYqhfcvjV1r9rMJTz99NMNaRNkYvICKAimKqBwGSwU4mChib33epY8bdq0zCtXVlbOmDEjtdyxY8fgDoVN3Ep677kLC8rKysI33gvv/61atRo6dGhqedOmTVOnTs1QzpdffvnYY4+llnv37t29e/fUct++fYPB24wZM7744ovaSti2bdvDDz9cn+NU2hlQYfPmzfvwww9rfCqW5uy///6pha+++uqdd97JUMJuu+3WoJlCsySWVvfv3z+4POnZZ58NT4Ka5rPPPnv55ZfTDv2x1KGeunbtGrzX5MmT33333ddeey3DNQjZ2ETTp0//9NNPayuhqqrqwQcfbFCjoP55gcgA8k14x5QUUIgMFgpxsNDE3nsGJ5xwQlDy5MmTw/cUqO7JJ58M5qE4++yzgwkRm7iV9N5zFxakTVORtn9efvnlwfKYMWMyBD/XXXdd8FW47LLLgse7dOly2mmnpZY3bdo0bty42kq44447MlwKEr5BaIbQ8brrrqvtqVia079//2D5/vvvz/Bec+fODZaPOOKI2u4gsmnTpkSWNb3Vu+66a3B6/5YtW2677bbaSrjpppuCk9OCzz2WOtRfUNVVq1YFJey+++7f//73a3tJ06vXoUOHYHrFysrK0aNH11bCPffcU+cpdtBQ5i+A/GSeAoqDwULBDRaa3nuvT8mbNm26+eaba1tzx44d4WdHjRoV41bSe8+k+ryOkydPruetU6vr1atX8NpZs2alPXvKKacEz15wwQU7duyoXkL4+3fooYdWVlaGn50/f34woWWrVq0mTZpUvYSpU6e2bt063MaRI0eGV6isrAwfp6ZMmVK9kGuuuSZtQ02dOjXe5lRVVQUXybRp0+aZZ56pcZMuXrw4uC1tz549q6qqws/efffdQflnnnnm6tWr01aoj4ULFwaFjB49OvPKTf8Qly9fHgR7ZWVl06ZNq15COOvdc889t2zZEm8dwqnhrbfeWltjt2/fXj2dveSSS7K9iT777LPw+95xxx3VS5g5c2baPWbSvufQFOGvVnPXBbBLkl8MFlraYKGJvfcMY42PP/442NQlJSUPPPBA9ZJ37tx56aWXBiX86Ec/Cj8by1bSe69NzGFBnz59gtf++te/Tnt2zZo14VPB+/Tp85e//OWzzz6rqKhYvXr1lClTwtNO7LLLLvPnz6/+FmPGjAnWadWq1ciRI1955ZXPP/98/fr1c+bMueCCC4KzjzJ8DOEvXNu2bX/7298uW7asoqLi008/ffLJJwcMGFB9ms3q+3/TmxO+J19paen555//7LPPrl69uqKiYsWKFS+88MJPf/rTcBxY/VD15ptvpjU2kUgMGzYse2FBLB/ifffdF6xTVlb2y1/+cuHChZs3b96yZcv8+fMvvvji8D1OHnroodjrUM+wIJlM/uxnP0vbvAsWLMjBJvrzn/8cftPTTjst9d3Ytm3bkiVLrrrqqtT3vG3btkH4nf+HGwpL2je/uasDLZQ9kTxksNDSBgtN7L1nHmtMmDAhXLczzjhj2rRpqTZ+8sknjz766PHHHx8827179xUrVsS+lfTecxQWhFOZzp07v/baa2krvPPOO+F5UGuzyy671JjhpbKln//853WWcP311wfL1T+GjRs3Zr7fRmo+1WeffTbD/h9Lc8Jn0WR244031ljC9773vVyGBbG0OplM3njjjfVp9bXXXpuNOtQ/LJg9e3a4wEMPPbTO7RPXJvrP//zPzC8vKSl56KGHhgwZUiiHGwpO9W9dc9cIWhA7IHnLYKGlDRaa2Huvc6zx7//+7/UpuXPnzkuWLMnSVtJ7z0VYMHbs2PDmGDJkSPV1Vq5cOXz48Awb8eijj65+4Ehz5513hueoCOvYseM999wTvgypxo/h7bffDt9vM82AAQOWL18evvVFjft/05tTVVU1evTotDNS0uy22273339/bSV88cUXv/rVr/bff/82bdrkJiyI60O8//77w7dXTdOlS5eJEydmqQ71DwuSyWTPnj3rv3Is1QtMnDgxfOPWtO2TOlQV0OGGAlX969fcNYIiZ6cjzxkstLTBQhN77/UZa/z1r3/9+te/nqGNp5122scff5y9raT3XqOS5poj59VXX3344Yefe+655cuXb9q0qUOHDvvvv/+xxx57+umnDxo0qD4lrFmzZsKECVOmTHn//fc3b97cpUuXHj16DBs2bMSIEXvttdeqVauCO3aMHDkyfOZMoKKi4pFHHnn88ceXLFmyevXqZDK51157HXfccSNGjAhmxcxNc1atWvXggw++9NJLixcv3rBhw5YtWzp06LDnnnseddRRJ5100ogRIzp06JDIP03/ENetW/fnP//5iSee+OCDD9asWdO2bduuXbseffTRp5xyytlnn92uXbsc1CGrml69tWvXTpgwYdKkSUuXLt2yZUu3bt0OOuigM88886yzzgpfTQdZlWGmQxOtQSzsZZDGYCE/BwtN773XZuvWrX/961+ffPLJ119/ffXq1Tt37uzSpcvee+89aNCg00477cgjj8zNVtJ7D2u2sCDb6rP/A9Ag7o8AOVOsPTTIEwYLUKf06T0AIPPoRWQAWSUmACAfCAsAaPxIRnAAsRAQAJBvhAUANJ4RDgBAUfrf+2ECAAAACAsAAACAdMICAAAAIEJYAAAAAESUmJsKAAAACHNmAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAARwgIAAAAgQlgAAAAARAgLAAAAgAhhAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAARwgIAAAAgQlgAAAAARAgLAAAAgAhhAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAARwgIAAAAgQlgAAAAARAgLAAAAgAhhAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAAAQISwAAAAAIoQFAAAAQISwAAAAAIgQFgAAAAARwgIAAAAgQlgAAAAARAgLAAAAgAhhAQAAABAhLAAAAAAihAUAAABAhLAAAAAAiBAWAAAAABHCAgAAACBCWAAAAABECAsAAACACGEBAAAAECEsAAAAACKEBQAAAECEsAAAAACIEBYAAAAAEcICAAAAIEJYAAAAAEQICwAAAIAIYQEAAACQCPt/APOxjAVLct2lAAAAAElFTkSuQmCC" alt="thread-s01" /></p>
+<h3 id="deploy-and-start">2.2 Deploy and start</h3>
+<ol type="1">
+<li>Rocket icon → <em>Camunda 8 Self-Managed</em>, endpoint
+<code>http://localhost:8080</code>, no authentication →
+<em>Deploy</em>.</li>
+<li>Before starting, check the model: it reads <strong>no
+variables</strong>, so there is no JSON to enter.</li>
+<li>Play icon → <em>Start instance</em> without variables.</li>
+<li>In Operate, find <code>student-request</code> and open the
+instance.</li>
+</ol>
+<p><strong>Checkpoint 1.</strong> Before completing anything, where is
+the token? Which event will let it move?</p>
+<h3 id="complete-the-work">2.3 Complete the work</h3>
+<ol type="1">
+<li>In Tasklist, open <code>Review request</code> → <em>Assign to
+me</em> → <em>Complete task</em>.</li>
+<li>Return to Operate and wait for the instance to show
+<em>Completed</em>.</li>
+<li>Note its instance key: the final check must find actual execution of
+the user task, not just a completed process.</li>
+</ol>
+<h3 id="think-about-1">2.4 Think about</h3>
+<ol type="1">
+<li>How does deploying a model differ from starting an instance?</li>
+<li>Why can an instance remain active without consuming human work
+automatically?</li>
+<li>Which tool changes the drawing, which shows the token, and which
+lets a person complete work?</li>
+</ol>
+<h2 id="step-3-keep-another-instance-alive">Step 3: keep another
+instance alive</h2>
+<h3 id="start-and-inspect">3.1 Start and inspect</h3>
+<p>Start a second instance, again without variables. Leave
+<code>Review request</code> open. Find it in Operate and compare it with
+the completed instance.</p>
+<h3 id="think-about-2">3.2 Think about</h3>
+<ol type="1">
+<li>Do the two instances share a token?</li>
+<li>Do they use the same deployed process version?</li>
+<li>What would happen to the waiting instance if you deployed another
+version?</li>
+</ol>
+<h2 id="step-4-name-id-and-version">Step 4: name, id and version</h2>
+<h3 id="change-only-the-name">4.1 Change only the name</h3>
+<p>Keep process ID <code>student-request</code>. Change its name to
+<code>Student request (test)</code> and deploy. Inspect the versions in
+Operate: the same id now has another version. Deploying the identical
+file again does not create a third version.</p>
+<h3 id="change-only-the-id">4.2 Change only the id</h3>
+<p>Change the ID to <code>student-request-test</code> and deploy. Find
+the separate process in Operate. It has its own version sequence.</p>
+<p>Restore the ID to <code>student-request</code> in your saved file.
+Keep both versions of the running case for the check.</p>
+<h3 id="think-about-3">4.3 Think about</h3>
+<ol type="1">
+<li>What identifies a process for the engine?</li>
+<li>Why does changing its name differ from changing its id?</li>
+<li>Did the active instance move to the new version?</li>
+</ol>
+<h2 id="step-5-clean-up-the-test-process">Step 5: clean up the test
+process</h2>
+<h3 id="delete-the-separate-test-process">5.1 Delete the separate test
+process</h3>
+<p>In Operate, filter process <code>student-request-test</code> and one
+version. Use <em>Delete</em>, read the confirmation and confirm. If it
+has multiple versions, remove each one. Wait until it disappears.</p>
+<p><strong>Do not delete <code>student-request</code>: its completed
+history and waiting instance are evidence for this session.</strong></p>
+<h3 id="inspect-the-deletion-rules">5.2 Inspect the deletion rules</h3>
+<p>Select the version of <code>student-request</code> containing the
+waiting instance. Hover over <em>Delete</em> without clicking. Explain
+why it is disabled.</p>
+<ul>
+<li>Deletion is per version, not per file.</li>
+<li>A version with running instances cannot be deleted until they are
+cancelled.</li>
+<li>Deleting a version also removes its finished instances, variables
+and history.</li>
+<li>Other versions are unaffected; if the latest is deleted, an earlier
+remaining version becomes latest.</li>
+</ul>
+<h3 id="think-about-4">5.3 Think about</h3>
+<ol type="1">
+<li>Why can the test process be deleted while the version containing the
+waiting instance cannot?</li>
+<li>What evidence would disappear if you deleted a version with
+completed instances?</li>
+<li>Does the absence of a test process prove it was created earlier?
+Explain the limitation of a final-state check.</li>
+</ol>
+<h2 id="step-6-final-check-and-delivery-receipt">Step 6: final check and
+delivery receipt</h2>
+<h3 id="before-checking">6.1 Before checking</h3>
+<ul>
+<li><input type="checkbox"> <code>student-request</code> has at least
+two deployed versions.</li>
+<li><input type="checkbox"> One instance completed
+<code>Review request</code> and another still waits there.</li>
+<li><input type="checkbox"> All versions of
+<code>student-request-test</code> have been deleted.</li>
+<li><input type="checkbox"> No instance of the running case has an
+active incident.</li>
+</ul>
+<h3 id="run-the-check">6.2 Run the check</h3>
+<p>In Tasklist → <em>Processes</em>, start
+<code>S01 · End-of-session check</code>. Enter your RUT, names and
+e-mail. Complete <code>S01 · Check your work</code>.</p>
+<p><strong>Version to assess:</strong> leave this optional field blank
+if the latest version is still the simple session-1 model. If you have
+already worked on later sessions, enter the session-1 version number
+shown in Operate. This selects the old model without replacing later
+versions.</p>
+<p>The checker reads the deployed model, versions, instances and actual
+task histories. If it reports missing evidence, follow the named guide
+step, fix the work and complete the task again. The final state proves
+that the test process is absent; it cannot prove the earlier creation
+after its history has been deleted.</p>
+<h3 id="confirm-reception">6.3 Confirm reception</h3>
+<p>A local pass is not a delivery receipt.
+<code>S01 · Delivery receipt</code> shows the receipt id, approval,
+server reception time and timing classification. Keep the receipt and
+complete the task.</p>
+<p>If <code>S01 · Delivery pending</code> appears, restore internet or
+correct your RUT and choose <em>Retry the same submission</em>. The same
+attempt is not written twice. Choose <em>Check my work again</em> after
+changing the model or evidence. If the service remains unavailable, tell
+the teacher and keep the check instance key; delivery remains
+pending.</p>
+<h3 id="finish-independently-after-class">6.4 Finish independently after
+class</h3>
+<p>You may complete this lab independently, using this guide and the
+automatic feedback. <strong>The School administration determines the
+exam date.</strong> All laboratories close at <strong>23:59,
+America/Santiago, on that day</strong>. Later submissions remain
+accepted and are marked <em>Late</em>. Until the date is configured,
+timing is shown as <em>Deadline not configured</em>; the teacher can
+classify existing receipts when the date is announced.</p>
+<p>Keep your BPMN file and Camunda data. The file alone does not
+preserve instances or their history. On another or reset computer:</p>
+<ol type="1">
+<li>Build/deploy the simple model and complete one instance.</li>
+<li>Start another and leave its user task active.</li>
+<li>Change only the name and deploy a second version.</li>
+<li>Repeat the id-change and cleanup exercise.</li>
+<li>Select a session-1 version and run the final check.</li>
+</ol>
+<p>After you have a confirmed receipt, you may cancel the waiting
+instance if the teacher asks. If you later recheck, create another
+waiting instance first. Do not delete the running-case versions.</p>
+<h3 id="think-about-5">6.5 Think about</h3>
+<ol type="1">
+<li>What is the difference between a model, a version and an
+instance?</li>
+<li>A colleague says “I deployed it but nothing happens.” What do you
+inspect first?</li>
+<li>How do you distinguish passed work from a result received by the
+teacher?</li>
+</ol>
+<h2 id="deliverable">Deliverable</h2>
+<p>The confirmed receipt is your laboratory submission. Nothing is
+uploaded manually. Keep <code>thread-s01.bpmn</code>: session 2 starts
+from it. The teacher’s dashboard preserves the first approved reception;
+a later retry does not make an on-time approval late.</p>
+<script>
+var ES = document.documentElement.lang === "es";
+var L = ES ? ["Copiar", "Copiado"] : ["Copy", "Copied"];
+document.querySelectorAll("pre").forEach(function (pre) {
+  if (pre.closest("div.type")) return;
+  var b = document.createElement("button");
+  b.className = "copy"; b.type = "button"; b.textContent = L[0];
+  b.addEventListener("click", function () {
+    var t = pre.querySelector("code").innerText.replace(/\n$/, "");
+    var ok = function () { b.textContent = L[1]; b.classList.add("done");
+      setTimeout(function () { b.textContent = L[0]; b.classList.remove("done"); }, 1500); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(t).then(ok);
+    } else {
+      var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+      a.select(); document.execCommand("copy"); a.remove(); ok();
+    }
+  });
+  pre.appendChild(b);
+});
+</script>
+</body>
+</html>

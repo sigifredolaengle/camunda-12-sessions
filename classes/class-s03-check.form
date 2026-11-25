@@ -14,17 +14,20 @@
       "id": "class_s03_check_1"
     },
     {
-      "type": "separator",
+      "type": "text",
+      "text": "### Done when\nSelect the repaired session-3 version; complete certificate, postponement approved, recognition rejected, and recognition approved. Keep the resolved condition incident at `Approved?`; leave no active incident.",
       "id": "class_s03_check_2"
     },
     {
-      "type": "text",
-      "text": "### Done when\n- your latest `student-request` is deployed (wait a few seconds after the deploy)\n- it has three exclusive gateways (`Type of request?`, `Approved?` and the merge) and two default flows\n- it has two inclusive gateways and no parallel gateway\n- script tasks save `certificateNumber`, `registered`, `letter`, `studentMessage`, `instructorMessage` and `registrarMessage`\n- three completed instances, one per path: `requestType` = `\"certificate\"`; `\"postponement\"` with `decision` = `\"approved\"`; `\"recognition\"` with `decision` = `\"rejected\"`\n- the engine saw the condition incident of step 6, and no instance is still stopped at it",
+      "type": "textfield",
+      "key": "assessedVersion",
+      "label": "Version to assess (optional)",
+      "description": "Operate → process version number, for example 2. Leave blank only if the latest version belongs to this session.",
       "id": "class_s03_check_3"
     },
     {
       "type": "text",
-      "text": "Complete this task to run the check.",
+      "text": "Complete this task to check. Wait a few seconds after deploying. If earlier evidence has been deleted, replay the instances from the guide. A passed local check is not a delivery receipt.",
       "id": "class_s03_check_4"
     }
   ],

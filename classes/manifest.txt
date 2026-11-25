@@ -1,12 +1,7 @@
 class-s01-start.form
-class-s01-part-a.form
-class-s01-run.form
-class-s01-alive.form
-class-s01-break.form
-class-s01-cleanup.form
-class-s01-self-check.form
-class-s01-compare.form
+class-s01-check.form
 class-s01-not-sent.form
+class-s01-receipt.form
 class-s01.bpmn
 class-s02-start.form
 class-s02-part-a.form
@@ -21,4 +16,5 @@ class-s02.bpmn
 class-s03-start.form
 class-s03-check.form
 class-s03-not-sent.form
+class-s03-receipt.form
 class-s03.bpmn

@@ -2,15 +2,42 @@
   "components": [
     {
       "type": "text",
-      "text": "## Your results were not sent\nThe engine could not reach the teacher's sheet (no internet?), or the sheet did not accept the results (a mistake in your RUT?). Your work is done: tell the teacher, who can see your check in Operate. If your RUT has a mistake, complete this task and start the check again with the right one.",
+      "text": "## Delivery pending\n{{deliveryError}}\nYour check has not been confirmed as received. Retry after restoring internet, correct your RUT, recheck your work, or tell the teacher and keep this instance key.",
       "id": "class_s03_not_sent_0"
     },
     {
-      "type": "checkbox",
-      "key": "toldTeacher",
-      "label": "I told the teacher",
-      "defaultValue": false,
+      "type": "textfield",
+      "key": "rut",
+      "label": "RUT",
+      "validate": {
+        "required": true,
+        "validationType": "custom",
+        "pattern": "^[0-9]{1,2}\\.?[0-9]{3}\\.?[0-9]{3}-?[0-9kK]$"
+      },
       "id": "class_s03_not_sent_1"
+    },
+    {
+      "type": "radio",
+      "key": "deliveryAction",
+      "label": "What next?",
+      "values": [
+        {
+          "label": "Retry the same submission",
+          "value": "retry"
+        },
+        {
+          "label": "Check my work again",
+          "value": "recheck"
+        },
+        {
+          "label": "I told the teacher; keep delivery pending",
+          "value": "teacher"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "class_s03_not_sent_2"
     }
   ],
   "type": "default",
