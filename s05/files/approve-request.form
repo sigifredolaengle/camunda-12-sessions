@@ -1,0 +1,49 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "## Approve recognition",
+      "id": "approve_request_0"
+    },
+    {
+      "type": "text",
+      "text": "**Student:** {{studentName}} ({{studentId}}, {{studentEmail}})\n\n**Type:** {{requestType}} · **Course:** {{course}} · **Days:** {{days}}\n\n**Due date:** {{dueDate}}\n\n**Reason:** {{reason}}",
+      "id": "approve_request_1"
+    },
+    {
+      "type": "text",
+      "text": "**Committee verdict:** {{committeeVerdict}}",
+      "id": "approve_request_2"
+    },
+    {
+      "type": "radio",
+      "key": "decision",
+      "label": "Final decision",
+      "values": [
+        {
+          "label": "Approve",
+          "value": "approved"
+        },
+        {
+          "label": "Reject",
+          "value": "rejected"
+        }
+      ],
+      "validate": {
+        "required": true
+      },
+      "id": "approve_request_3"
+    },
+    {
+      "type": "textarea",
+      "key": "headComment",
+      "label": "Comment",
+      "id": "approve_request_4"
+    }
+  ],
+  "type": "default",
+  "id": "approve-request",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 18
+}

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_student-request" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <bpmn:collaboration id="Collaboration_student_request">
+    <bpmn:participant id="Participant_student_request" name="University" processRef="student-request" />
+  </bpmn:collaboration>
+  <bpmn:process id="student-request" name="Student request" isExecutable="true">
+    <bpmn:documentation>Session 05 starter. Attach the deadline and reminder to Review request.</bpmn:documentation>
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_student" name="Student"><bpmn:flowNodeRef>Start</bpmn:flowNodeRef></bpmn:lane>
+      <bpmn:lane id="Lane_office" name="Academic office"><bpmn:flowNodeRef>Review</bpmn:flowNodeRef><bpmn:flowNodeRef>GwHead</bpmn:flowNodeRef><bpmn:flowNodeRef>GwHeadMerge</bpmn:flowNodeRef></bpmn:lane>
+      <bpmn:lane id="Lane_head" name="Program head"><bpmn:flowNodeRef>HeadApprove</bpmn:flowNodeRef></bpmn:lane>
+      <bpmn:lane id="Lane_system" name="System (engine)"><bpmn:flowNodeRef>ComputeDue</bpmn:flowNodeRef><bpmn:flowNodeRef>GwType</bpmn:flowNodeRef><bpmn:flowNodeRef>Issue</bpmn:flowNodeRef><bpmn:flowNodeRef>GwMerge</bpmn:flowNodeRef><bpmn:flowNodeRef>GwDecision</bpmn:flowNodeRef><bpmn:flowNodeRef>Register</bpmn:flowNodeRef><bpmn:flowNodeRef>Reject</bpmn:flowNodeRef><bpmn:flowNodeRef>GwNotify</bpmn:flowNodeRef><bpmn:flowNodeRef>GwNotifyJoin</bpmn:flowNodeRef><bpmn:flowNodeRef>NotifyStudent</bpmn:flowNodeRef><bpmn:flowNodeRef>NotifyInstructor</bpmn:flowNodeRef><bpmn:flowNodeRef>NotifyRegistrar</bpmn:flowNodeRef><bpmn:flowNodeRef>End</bpmn:flowNodeRef></bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start" name="Request received">
+      <bpmn:extensionElements><zeebe:formDefinition formId="request-intake" /></bpmn:extensionElements>
+      <bpmn:outgoing>Flow_Start_ComputeDue</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="ComputeDue" name="Compute due date">
+      <bpmn:extensionElements><zeebe:script expression='=string(today() + duration("P5D"))' resultVariable="dueDate" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_Start_ComputeDue</bpmn:incoming>
+      <bpmn:outgoing>Flow_ComputeDue_GwType</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:exclusiveGateway id="GwType" name="Type of request?" default="Flow_GwType_Review">
+      <bpmn:incoming>Flow_ComputeDue_GwType</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwType_Issue</bpmn:outgoing>
+      <bpmn:outgoing>Flow_GwType_Review</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:scriptTask id="Issue" name="Issue certificate">
+      <bpmn:extensionElements><zeebe:script expression='="CERT-" + studentId + "-" + string(today())' resultVariable="certificateNumber" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwType_Issue</bpmn:incoming>
+      <bpmn:outgoing>Flow_Issue_GwMerge</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:userTask id="Review" name="Review request">
+      <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="review-request" /><zeebe:taskSchedule dueDate='=dueDate + "T18:00:00-03:00"' /><zeebe:priorityDefinition priority="50" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwType_Review</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review_GwHead</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GwMerge">
+      <bpmn:incoming>Flow_Issue_GwMerge</bpmn:incoming>
+      <bpmn:incoming>Flow_Register_GwMerge</bpmn:incoming>
+      <bpmn:incoming>Flow_Reject_GwMerge</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwMerge_GwNotify</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GwHead" name="Needs program head?" default="Flow_GwHead_GwHeadMerge">
+      <bpmn:incoming>Flow_Review_GwHead</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwHead_HeadApprove</bpmn:outgoing>
+      <bpmn:outgoing>Flow_GwHead_GwHeadMerge</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="HeadApprove" name="Approve recognition">
+      <bpmn:extensionElements><zeebe:userTask /><zeebe:formDefinition formId="approve-request" /><zeebe:priorityDefinition priority="75" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwHead_HeadApprove</bpmn:incoming>
+      <bpmn:outgoing>Flow_HeadApprove_GwHeadMerge</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GwHeadMerge">
+      <bpmn:incoming>Flow_GwHead_GwHeadMerge</bpmn:incoming>
+      <bpmn:incoming>Flow_HeadApprove_GwHeadMerge</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwHeadMerge_GwDecision</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GwDecision" name="Approved?" default="Flow_GwDecision_Reject">
+      <bpmn:incoming>Flow_GwHeadMerge_GwDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwDecision_Register</bpmn:outgoing>
+      <bpmn:outgoing>Flow_GwDecision_Reject</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:scriptTask id="Register" name="Register decision">
+      <bpmn:extensionElements><zeebe:script expression="=true" resultVariable="registered" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwDecision_Register</bpmn:incoming>
+      <bpmn:outgoing>Flow_Register_GwMerge</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Reject" name="Prepare rejection letter">
+      <bpmn:extensionElements><zeebe:script expression='="Dear " + studentName + ", your request was rejected. " + (if comment = null then "" else comment)' resultVariable="letter" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwDecision_Reject</bpmn:incoming>
+      <bpmn:outgoing>Flow_Reject_GwMerge</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:inclusiveGateway id="GwNotify" name="Who must be informed?">
+      <bpmn:incoming>Flow_GwMerge_GwNotify</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwNotify_NotifyStudent</bpmn:outgoing>
+      <bpmn:outgoing>Flow_GwNotify_NotifyInstructor</bpmn:outgoing>
+      <bpmn:outgoing>Flow_GwNotify_NotifyRegistrar</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:inclusiveGateway id="GwNotifyJoin">
+      <bpmn:incoming>Flow_NotifyStudent_GwNotifyJoin</bpmn:incoming>
+      <bpmn:incoming>Flow_NotifyInstructor_GwNotifyJoin</bpmn:incoming>
+      <bpmn:incoming>Flow_NotifyRegistrar_GwNotifyJoin</bpmn:incoming>
+      <bpmn:outgoing>Flow_GwNotifyJoin_End</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:scriptTask id="NotifyStudent" name="Notify student">
+      <bpmn:extensionElements><zeebe:script expression='="To " + studentEmail + ": your " + requestType + " request was processed."' resultVariable="studentMessage" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwNotify_NotifyStudent</bpmn:incoming>
+      <bpmn:outgoing>Flow_NotifyStudent_GwNotifyJoin</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="NotifyInstructor" name="Notify instructor">
+      <bpmn:extensionElements><zeebe:script expression='="Instructor of " + course + ": postponement request of " + studentName' resultVariable="instructorMessage" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwNotify_NotifyInstructor</bpmn:incoming>
+      <bpmn:outgoing>Flow_NotifyInstructor_GwNotifyJoin</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="NotifyRegistrar" name="Notify registrar">
+      <bpmn:extensionElements><zeebe:script expression='="Registrar: recognise " + course + " for " + studentId' resultVariable="registrarMessage" /></bpmn:extensionElements>
+      <bpmn:incoming>Flow_GwNotify_NotifyRegistrar</bpmn:incoming>
+      <bpmn:outgoing>Flow_NotifyRegistrar_GwNotifyJoin</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="End" name="Request closed">
+      <bpmn:incoming>Flow_GwNotifyJoin_End</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_Start_ComputeDue" sourceRef="Start" targetRef="ComputeDue" />
+    <bpmn:sequenceFlow id="Flow_ComputeDue_GwType" sourceRef="ComputeDue" targetRef="GwType" />
+    <bpmn:sequenceFlow id="Flow_GwType_Issue" name="certificate" sourceRef="GwType" targetRef="Issue">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=requestType = "certificate"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_GwType_Review" name="needs review" sourceRef="GwType" targetRef="Review" />
+    <bpmn:sequenceFlow id="Flow_Issue_GwMerge" sourceRef="Issue" targetRef="GwMerge" />
+    <bpmn:sequenceFlow id="Flow_Review_GwHead" sourceRef="Review" targetRef="GwHead" />
+    <bpmn:sequenceFlow id="Flow_GwHead_HeadApprove" name="recognition approved" sourceRef="GwHead" targetRef="HeadApprove">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=requestType = "recognition" and decision = "approved"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_GwHead_GwHeadMerge" name="no" sourceRef="GwHead" targetRef="GwHeadMerge" />
+    <bpmn:sequenceFlow id="Flow_HeadApprove_GwHeadMerge" sourceRef="HeadApprove" targetRef="GwHeadMerge" />
+    <bpmn:sequenceFlow id="Flow_GwHeadMerge_GwDecision" sourceRef="GwHeadMerge" targetRef="GwDecision" />
+    <bpmn:sequenceFlow id="Flow_GwDecision_Register" name="approved" sourceRef="GwDecision" targetRef="Register">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=decision = "approved"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_GwDecision_Reject" name="rejected" sourceRef="GwDecision" targetRef="Reject" />
+    <bpmn:sequenceFlow id="Flow_Register_GwMerge" sourceRef="Register" targetRef="GwMerge" />
+    <bpmn:sequenceFlow id="Flow_Reject_GwMerge" sourceRef="Reject" targetRef="GwMerge" />
+    <bpmn:sequenceFlow id="Flow_GwMerge_GwNotify" sourceRef="GwMerge" targetRef="GwNotify" />
+    <bpmn:sequenceFlow id="Flow_GwNotify_NotifyStudent" name="always" sourceRef="GwNotify" targetRef="NotifyStudent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_GwNotify_NotifyInstructor" name="postponement" sourceRef="GwNotify" targetRef="NotifyInstructor">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=requestType = "postponement"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_GwNotify_NotifyRegistrar" name="recognition approved" sourceRef="GwNotify" targetRef="NotifyRegistrar">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=requestType = "recognition" and decision = "approved"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_NotifyStudent_GwNotifyJoin" sourceRef="NotifyStudent" targetRef="GwNotifyJoin" />
+    <bpmn:sequenceFlow id="Flow_NotifyInstructor_GwNotifyJoin" sourceRef="NotifyInstructor" targetRef="GwNotifyJoin" />
+    <bpmn:sequenceFlow id="Flow_NotifyRegistrar_GwNotifyJoin" sourceRef="NotifyRegistrar" targetRef="GwNotifyJoin" />
+    <bpmn:sequenceFlow id="Flow_GwNotifyJoin_End" sourceRef="GwNotifyJoin" targetRef="End" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_student_request">
+    <bpmndi:BPMNPlane id="Plane_student_request" bpmnElement="Collaboration_student_request">
+      <bpmndi:BPMNShape id="Participant_student_request_di" bpmnElement="Participant_student_request" isHorizontal="true"><dc:Bounds x="60" y="80" width="2430" height="1040" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_student_di" bpmnElement="Lane_student" isHorizontal="true"><dc:Bounds x="90" y="80" width="2400" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_office_di" bpmnElement="Lane_office" isHorizontal="true"><dc:Bounds x="90" y="210" width="2400" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_head_di" bpmnElement="Lane_head" isHorizontal="true"><dc:Bounds x="90" y="340" width="2400" height="130" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_system_di" bpmnElement="Lane_system" isHorizontal="true"><dc:Bounds x="90" y="470" width="2400" height="650" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start"><dc:Bounds x="157" y="127" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ComputeDue_di" bpmnElement="ComputeDue"><dc:Bounds x="290" y="495" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwType_di" bpmnElement="GwType" isMarkerVisible="true"><dc:Bounds x="490" y="510" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Issue_di" bpmnElement="Issue"><dc:Bounds x="630" y="495" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Review_di" bpmnElement="Review"><dc:Bounds x="630" y="235" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwMerge_di" bpmnElement="GwMerge" isMarkerVisible="true"><dc:Bounds x="1680" y="510" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwHead_di" bpmnElement="GwHead" isMarkerVisible="true"><dc:Bounds x="830" y="250" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="HeadApprove_di" bpmnElement="HeadApprove"><dc:Bounds x="970" y="365" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwHeadMerge_di" bpmnElement="GwHeadMerge" isMarkerVisible="true"><dc:Bounds x="1170" y="250" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwDecision_di" bpmnElement="GwDecision" isMarkerVisible="true"><dc:Bounds x="1340" y="640" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Register_di" bpmnElement="Register"><dc:Bounds x="1480" y="625" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Reject_di" bpmnElement="Reject"><dc:Bounds x="1480" y="755" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwNotify_di" bpmnElement="GwNotify"><dc:Bounds x="1850" y="510" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="NotifyStudent_di" bpmnElement="NotifyStudent"><dc:Bounds x="1990" y="495" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="NotifyInstructor_di" bpmnElement="NotifyInstructor"><dc:Bounds x="1990" y="885" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="NotifyRegistrar_di" bpmnElement="NotifyRegistrar"><dc:Bounds x="1990" y="1015" width="110" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GwNotifyJoin_di" bpmnElement="GwNotifyJoin"><dc:Bounds x="2190" y="510" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End"><dc:Bounds x="2367" y="517" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Start_ComputeDue_di" bpmnElement="Flow_Start_ComputeDue"><di:waypoint x="193" y="145" /><di:waypoint x="242" y="145" /><di:waypoint x="242" y="535" /><di:waypoint x="290" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ComputeDue_GwType_di" bpmnElement="Flow_ComputeDue_GwType"><di:waypoint x="400" y="535" /><di:waypoint x="490" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwType_Issue_di" bpmnElement="Flow_GwType_Issue"><di:waypoint x="540" y="535" /><di:waypoint x="630" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwType_Review_di" bpmnElement="Flow_GwType_Review"><di:waypoint x="515" y="510" /><di:waypoint x="515" y="275" /><di:waypoint x="630" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Issue_GwMerge_di" bpmnElement="Flow_Issue_GwMerge"><di:waypoint x="740" y="535" /><di:waypoint x="1680" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Review_GwHead_di" bpmnElement="Flow_Review_GwHead"><di:waypoint x="740" y="275" /><di:waypoint x="830" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwHead_HeadApprove_di" bpmnElement="Flow_GwHead_HeadApprove"><di:waypoint x="855" y="300" /><di:waypoint x="855" y="405" /><di:waypoint x="970" y="405" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwHead_GwHeadMerge_di" bpmnElement="Flow_GwHead_GwHeadMerge"><di:waypoint x="880" y="275" /><di:waypoint x="1170" y="275" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_HeadApprove_GwHeadMerge_di" bpmnElement="Flow_HeadApprove_GwHeadMerge"><di:waypoint x="1080" y="405" /><di:waypoint x="1195" y="405" /><di:waypoint x="1195" y="300" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwHeadMerge_GwDecision_di" bpmnElement="Flow_GwHeadMerge_GwDecision"><di:waypoint x="1195" y="300" /><di:waypoint x="1195" y="665" /><di:waypoint x="1340" y="665" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwDecision_Register_di" bpmnElement="Flow_GwDecision_Register"><di:waypoint x="1390" y="665" /><di:waypoint x="1480" y="665" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwDecision_Reject_di" bpmnElement="Flow_GwDecision_Reject"><di:waypoint x="1365" y="690" /><di:waypoint x="1365" y="795" /><di:waypoint x="1480" y="795" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Register_GwMerge_di" bpmnElement="Flow_Register_GwMerge"><di:waypoint x="1590" y="665" /><di:waypoint x="1705" y="665" /><di:waypoint x="1705" y="560" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Reject_GwMerge_di" bpmnElement="Flow_Reject_GwMerge"><di:waypoint x="1590" y="795" /><di:waypoint x="1705" y="795" /><di:waypoint x="1705" y="560" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwMerge_GwNotify_di" bpmnElement="Flow_GwMerge_GwNotify"><di:waypoint x="1730" y="535" /><di:waypoint x="1850" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwNotify_NotifyStudent_di" bpmnElement="Flow_GwNotify_NotifyStudent"><di:waypoint x="1900" y="535" /><di:waypoint x="1990" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwNotify_NotifyInstructor_di" bpmnElement="Flow_GwNotify_NotifyInstructor"><di:waypoint x="1875" y="560" /><di:waypoint x="1875" y="925" /><di:waypoint x="1990" y="925" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwNotify_NotifyRegistrar_di" bpmnElement="Flow_GwNotify_NotifyRegistrar"><di:waypoint x="1875" y="560" /><di:waypoint x="1875" y="1055" /><di:waypoint x="1990" y="1055" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotifyStudent_GwNotifyJoin_di" bpmnElement="Flow_NotifyStudent_GwNotifyJoin"><di:waypoint x="2100" y="535" /><di:waypoint x="2190" y="535" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotifyInstructor_GwNotifyJoin_di" bpmnElement="Flow_NotifyInstructor_GwNotifyJoin"><di:waypoint x="2100" y="925" /><di:waypoint x="2215" y="925" /><di:waypoint x="2215" y="560" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_NotifyRegistrar_GwNotifyJoin_di" bpmnElement="Flow_NotifyRegistrar_GwNotifyJoin"><di:waypoint x="2100" y="1055" /><di:waypoint x="2215" y="1055" /><di:waypoint x="2215" y="560" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GwNotifyJoin_End_di" bpmnElement="Flow_GwNotifyJoin_End"><di:waypoint x="2240" y="535" /><di:waypoint x="2367" y="535" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

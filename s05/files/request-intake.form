@@ -1,0 +1,97 @@
+{
+  "components": [
+    {
+      "text": "## Student request\nFill in the request. Postponements need the number of days.",
+      "type": "text",
+      "id": "request_intake_0"
+    },
+    {
+      "label": "Full name",
+      "type": "textfield",
+      "key": "studentName",
+      "validate": {
+        "required": true
+      },
+      "id": "request_intake_1"
+    },
+    {
+      "label": "Student ID (RUT)",
+      "type": "textfield",
+      "key": "studentId",
+      "validate": {
+        "required": true
+      },
+      "description": "Format 12.345.678-9",
+      "id": "request_intake_2"
+    },
+    {
+      "label": "E-mail",
+      "type": "textfield",
+      "key": "studentEmail",
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      },
+      "id": "request_intake_3"
+    },
+    {
+      "label": "Type of request",
+      "values": [
+        {
+          "label": "Postponement of an exam",
+          "value": "postponement"
+        },
+        {
+          "label": "Recognition of a course taken elsewhere",
+          "value": "recognition"
+        },
+        {
+          "label": "Certificate of enrolment",
+          "value": "certificate"
+        }
+      ],
+      "type": "select",
+      "key": "requestType",
+      "validate": {
+        "required": true
+      },
+      "id": "request_intake_4"
+    },
+    {
+      "label": "Course",
+      "type": "textfield",
+      "key": "course",
+      "validate": {
+        "required": true
+      },
+      "id": "request_intake_5"
+    },
+    {
+      "label": "Days of postponement",
+      "type": "number",
+      "key": "days",
+      "validate": {
+        "required": true
+      },
+      "conditional": {
+        "hide": "=requestType != \"postponement\""
+      },
+      "id": "request_intake_6"
+    },
+    {
+      "label": "Reason",
+      "type": "textarea",
+      "key": "reason",
+      "id": "request_intake_7"
+    }
+  ],
+  "type": "default",
+  "id": "request-intake",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.9.0",
+  "schemaVersion": 19,
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.52.0"
+  }
+}
